@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+*{
+    font-family:'Montserrat', sans-serif;
+}
+
+.producto {
+    background-color: white;
+    margin: 30px;
+    border-radius: 10px;
+}
+
+.profesor{
+    margin: 30px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.producto .imagen {
+    width: 50%;
+    border-bottom: 1px solid #ebebeb;
+    border-right: 1px solid #ebebeb;
+    padding: 30px;
+}
+
+.producto-info {
+    padding: 30px;
+    border-radius: 35px;
+    background: #1976d22b;
+}
+
+.producto-info h2 {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.nombre p, .info p{
+    font-size: 24px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.info p{
+    font-size: 18px;
+    font-weight: 300;
+}
+
+.info .info-lista{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+.info .info-lista li{
+    margin-bottom: 16px;
+    font-family: 'Montserrat', sans-serif;;
+}
+
+.acerca-profesor h2 {
+    font-size: 30px;
+    font-weight: 800;
+}

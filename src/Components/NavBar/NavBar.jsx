@@ -12,9 +12,10 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import { Link } from 'react-router-dom';
 
 const pages = ['Precios', 'Zona', 'Nivel'];
-const settings = ['Perfil', 'Notificaciones', 'Cerrar Sesión'];
+const settings = ['Perfil', 'Notificaciones', 'Iniciar Sesión'];
 
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -146,11 +147,29 @@ const NavBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+              {
+                <MenuItem key={settings[0]}>
+                  <Typography textAlign="center">{settings[0]}</Typography>
                 </MenuItem>
-              ))}
+              }
+
+              {
+                <MenuItem key={settings[1]}>
+                  <Typography textAlign="center">{settings[1]}</Typography>
+                </MenuItem>
+              }
+
+              {
+                <MenuItem key={settings[2]}>
+                  <Link style={{textDecoration: "none"}} to={"/Login"}><Typography textAlign="center">{settings[2]}</Typography></Link>
+                </MenuItem>
+              }
+
+              {/* settings.map((setting) => (
+              <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">{setting}</Typography>
+              </MenuItem>
+              ))} */}
             </Menu>
           </Box>
         </Toolbar>

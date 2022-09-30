@@ -6,14 +6,17 @@ import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { useEffect } from 'react';
 import dayjs from 'dayjs';
-
+import { getComentarios } from '../../DB/db';
+import Comentario from '../Comentario/Comentario';
 
 const ItemDetail = ({ id, nombre, apellido, precio, materia, tipo, frecuencia, duracion, img, descripcionClase, descripcionProfesor }) => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [value, setValue] = useState(dayjs('2014-08-18T00:00:00'));
+    const [comentarios, setComentarios] = useState([])
     const handleChange = (newValue) => {
         setValue(newValue);
     };
@@ -34,6 +37,13 @@ const ItemDetail = ({ id, nombre, apellido, precio, materia, tipo, frecuencia, d
         marginBottom: '20px'
     }
 
+    useEffect(() => {
+        getComentarios(2000).then(response => {
+            setComentarios(response.find(res => res.idMateria == id).comentarios)
+        })
+    }, [])
+
+    console.log(comentarios.map(comentario => console.log(comentario.id)))
 
     return (
         <div style={{ display: "flex" }}>
@@ -53,11 +63,11 @@ const ItemDetail = ({ id, nombre, apellido, precio, materia, tipo, frecuencia, d
                     <TextField sx={inputs} id="outlined-basic" label="Teléfono" variant="outlined" />
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <TimePicker
-                        label="Time"
-                        value={value}
-                        onChange={handleChange}
-                        renderInput={(params) => <TextField {...params} />}
-                    />
+                            label="Time"
+                            value={value}
+                            onChange={handleChange}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
                     </LocalizationProvider>
                 </Box>
             </Modal>
@@ -70,7 +80,14 @@ const ItemDetail = ({ id, nombre, apellido, precio, materia, tipo, frecuencia, d
                 <div className="acerca-profesor producto">
                     <h2>Acerca de {nombre} {apellido}</h2>
                     <p>{descripcionProfesor}</p>
-                </div></div>
+                </div>
+                <div className="producto comentarios">
+                    <h2>Comentarios</h2>
+                    <ul className="listado">
+                        {comentarios.map(comentario => <Comentario key={comentario.id} {...comentario} />)}
+                    </ul>
+                </div>
+            </div>
 
             <div className='profesor'>
                 <div className='card-profesor'>

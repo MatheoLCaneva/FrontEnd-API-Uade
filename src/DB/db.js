@@ -21,13 +21,22 @@ const clases = [
 ]
 
 const comentarios = [
-    {idMateria: "Mat1", }
+    {idMateria: "Mat1", comentarios: [ {id: "1",comentario: "Super recomendado, me ayudo a aprobar la cursada", usuario: "Joaquín"}, {id: "2",comentario: "Clases dinámicas, recomendado!", usuario: "Marcos"}, {id: "3",comentario: "Lo recomiendo pero los tiempos de habla son muy rápidos", usuario: "Ramiro"}] },
+    // {idMateria: "Geo1", comentarios: [ {comentario: "Aprobe, aprendí y entendí todo, un genio!", usuario: "Tomás"}, {comentario: "Vale cada minuto, un lujo", usuario: "Luciana"}]}
 ]
 
 export const getClases = (tiempo) => {
     return new Promise ((resolve, reject) => {
         setTimeout(() =>{
             resolve(clases)
+        }, tiempo)
+    })
+}
+
+export const getComentarios = (tiempo) => {
+    return new Promise ((resolve, reject) => {
+        setTimeout(() =>{
+            resolve(comentarios)
         }, tiempo)
     })
 }

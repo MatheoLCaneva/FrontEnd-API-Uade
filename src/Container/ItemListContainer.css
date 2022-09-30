@@ -1,0 +1,13 @@
+.filtro-contenedor{
+    display: flex;
+    margin: auto;
+}
+
+.filtros{
+    width: 87%;
+    margin: auto;
+}
+
+.filtro{ 
+    margin: 0 10px
+}

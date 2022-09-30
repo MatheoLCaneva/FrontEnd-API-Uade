@@ -1,9 +1,63 @@
 import './ItemDetail.css'
+import Button from '@mui/material/Button';
+import { useState } from 'react';
+import { Modal, Box, Typography } from '@mui/material';
+import TextField from '@mui/material/TextField';
+import { TimePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
 
 
 const ItemDetail = ({ id, nombre, apellido, precio, materia, tipo, frecuencia, duracion, img, descripcionClase, descripcionProfesor }) => {
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const [value, setValue] = useState(dayjs('2014-08-18T21:11:54'));
+    const handleChange = (newValue) => {
+        setValue(newValue);
+    };
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
+
+    const inputs = {
+        marginBottom: '20px'
+    }
+
+
     return (
         <div style={{ display: "flex" }}>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography style={{ marginBottom: '10px' }} id="modal-modal-title" variant="h5" component="h2">
+                        Contactar Profesor
+                    </Typography>
+                    <TextField sx={inputs} id="outlined-basic" label="Nombre" variant="outlined" />
+                    <TextField sx={inputs} id="outlined-basic" label="Apellido" variant="outlined" />
+                    <TextField sx={inputs} id="outlined-basic" label="Mail" variant="outlined" />
+                    <TextField sx={inputs} id="outlined-basic" label="Teléfono" variant="outlined" />
+                    <TimePicker
+                        label="Time"
+                        value={value}
+                        onChange={handleChange}
+                        renderInput={(params) => <TextField {...params} />}
+                    />
+
+                </Box>
+            </Modal>
             <div>
                 <div className="producto">
                     <div className="producto-info">
@@ -30,6 +84,9 @@ const ItemDetail = ({ id, nombre, apellido, precio, materia, tipo, frecuencia, d
                                 <li>Tipo de clase: {tipo}</li>
                                 <li>Frecuencia: {frecuencia}</li>
                             </ul>
+                            <div className="contacto">
+                                <Button size='medium' className='btnContacto' variant="contained" onClick={handleOpen}>Contactar Profe</Button>
+                            </div>
                         </div>
                     </div>
                 </div>

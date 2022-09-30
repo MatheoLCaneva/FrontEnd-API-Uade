@@ -3,7 +3,9 @@ import Button from '@mui/material/Button';
 import { useState } from 'react';
 import { Modal, Box, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 
 
@@ -11,7 +13,7 @@ const ItemDetail = ({ id, nombre, apellido, precio, materia, tipo, frecuencia, d
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    const [value, setValue] = useState(dayjs('2014-08-18T21:11:54'));
+    const [value, setValue] = useState(dayjs('2014-08-18T00:00:00'));
     const handleChange = (newValue) => {
         setValue(newValue);
     };
@@ -49,13 +51,14 @@ const ItemDetail = ({ id, nombre, apellido, precio, materia, tipo, frecuencia, d
                     <TextField sx={inputs} id="outlined-basic" label="Apellido" variant="outlined" />
                     <TextField sx={inputs} id="outlined-basic" label="Mail" variant="outlined" />
                     <TextField sx={inputs} id="outlined-basic" label="Teléfono" variant="outlined" />
-                    <TimePicker
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <TimePicker
                         label="Time"
                         value={value}
                         onChange={handleChange}
                         renderInput={(params) => <TextField {...params} />}
                     />
-
+                    </LocalizationProvider>
                 </Box>
             </Modal>
             <div>
@@ -91,7 +94,7 @@ const ItemDetail = ({ id, nombre, apellido, precio, materia, tipo, frecuencia, d
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 
 }

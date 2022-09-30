@@ -20,6 +20,10 @@ const clases = [
     }
 ]
 
+const comentarios = [
+    {idMateria: "Mat1", }
+]
+
 export const getClases = (tiempo) => {
     return new Promise ((resolve, reject) => {
         setTimeout(() =>{

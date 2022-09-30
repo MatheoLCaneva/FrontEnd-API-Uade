@@ -8,7 +8,7 @@ import { Button, CardActionArea, CardActions } from '@mui/material';
 
 const Item = ({ nombre, apellido, precio, materia, tipo, frecuencia, duracion, calificacion, img, id }) => {
     return (
-        <Card sx={{ maxWidth: 345 }}>
+        <Card sx={{ maxWidth: 345, borderRadius: "20px" }}>
             <CardActionArea>
                 <CardMedia
                     component="img"

@@ -10,6 +10,7 @@ import RegistroProfesores from './Components/Registro/RegistroProfesores';
 import RegistroAlumnos from './Components/Registro/RegistroAlumnos';
 import RecuperoContraseña from './Components/RecuperoContraseña/RecuperoContraseña';
 import Login from './Components/Login/Login';
+import ClasesProfesor from './Components/Clases/ClasesProfesor';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path='/RegistroAlumno' element={<RegistroAlumnos />}/>
         <Route path='/Login' element={<Login/>}/>
         <Route path='/RecuperarContrasena' element={<RecuperoContraseña/>}/>
+        <Route path='/ClasesProfesor' element={<ClasesProfesor/>}/>
         <Route path='/' element={<ItemListContainer mensaje={"Listado de Profesores"} />} />
       </Routes>
     </Router>

@@ -1,8 +1,6 @@
 import * as React from 'react'
-import { Grid, Paper, Avatar, Typography, TextField, Button, Checkbox, FormLabel, MenuItem, Select, InputLabel } from "@mui/material"
+import { Grid, Paper, Avatar, Typography, TextField, Button } from "@mui/material"
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { DEFAULT_ATTRIBUTE } from '@mui/system/cssVars/getInitColorSchemeScript';
 
 
 const RegistroProfesores = () => {

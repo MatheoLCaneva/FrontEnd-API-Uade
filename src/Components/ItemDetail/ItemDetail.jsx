@@ -61,7 +61,16 @@ const ItemDetail = ({ id, nombre, apellido, precio, materia, tipo, frecuencia, d
                     <TextField sx={inputs} id="outlined-basic" label="Apellido" variant="outlined" />
                     <TextField sx={inputs} id="outlined-basic" label="Mail" variant="outlined" />
                     <TextField sx={inputs} id="outlined-basic" label="Teléfono" variant="outlined" />
-                    <Button style={{display: "block"}} variant="contained">Contratar</Button>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <TimePicker
+                            label="Horario"
+                            value={value}
+                            onChange={handleChange}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
+
+                    </LocalizationProvider>
+                    <Button style={{ display: "block" }} variant="contained">Contratar</Button>
 
                 </Box>
             </Modal>

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Grid, Paper, Avatar, Typography, TextField, Button, Checkbox, FormLabel, MenuItem, Select, InputLabel, FormControl } from "@mui/material"
+import { Grid, Paper, Avatar, Typography, TextField, Button, MenuItem, Select, InputLabel, FormControl } from "@mui/material"
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 
 
@@ -7,7 +7,6 @@ const RegistroAlumnos = () => {
     const paperStyle = { padding: 20, width: 500, margin: "0 auto" }
     const headerStyle = { margin: 0 }
     const avatarStyle = { backgroundColor: '#1bbd7e' }
-    const marginTop = { marginTop: 5 }
     const TextfieldStyle = { margin: '3px 0' }
     const [Estudios, SetEstudios] = React.useState('');
 

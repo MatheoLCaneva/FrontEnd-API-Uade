@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getProfesores, getClases } from "../DB/db";
+import { getClases } from "../DB/db";
 import ItemList from "../Components/ItemList/ItemList";
 import './ItemListContainer.css'
 import Selector from "../Components/Selector/Selector";

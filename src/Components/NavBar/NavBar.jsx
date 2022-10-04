@@ -15,14 +15,13 @@ import { Link } from 'react-router-dom';
 import './NavBar.css'
 
 
-const pages = ['Precios', 'Zona', 'Nivel'];
 const settings = ['Clases', 'Perfil', 'Notificaciones', 'Iniciar/Cerrar Sesión'];
 
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-  
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -142,9 +141,11 @@ const NavBar = () => {
               }
 
               {
-                <MenuItem key={settings[1]}>
-                  <Typography textAlign="center">{settings[1]}</Typography>
-                </MenuItem>
+                <Link className='link' to={'/Perfil'}>
+                  <MenuItem key={settings[1]}>
+                    <Typography textAlign="center">{settings[1]}</Typography>
+                  </MenuItem>
+                </Link>
               }
 
               {

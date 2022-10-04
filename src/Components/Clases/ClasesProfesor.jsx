@@ -1,4 +1,3 @@
-import React, { Component } from 'react'
 // import ApiService from "../../service/ApiService";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -50,36 +49,6 @@ const ClasesProfesor = () => {
 
     const inputs = {
         marginBottom: '20px'
-    }
-
-
-    function componentDidMount() {
-        this.reloadUserList();
-    }
-
-    function reloadUserList() {
-        // ApiService.fetchUsers()
-        //     .then((res) => {
-        //         this.setState({users: res.data.result})
-        //     });
-    }
-
-    function deleteUser(userId) {
-        // ApiService.deleteUser(userId)
-        //    .then(res => {
-        //        this.setState({message : 'User deleted successfully.'});
-        //        this.setState({users: this.state.users.filter(user => user.id !== userId)});
-        //    })
-    }
-
-    function editUser(id) {
-        window.localStorage.setItem("userId", id);
-        this.props.history.push('/edit-user');
-    }
-
-    function addUser() {
-        window.localStorage.removeItem("userId");
-        this.props.history.push('/add-user');
     }
 
     return (
@@ -142,11 +111,5 @@ const ClasesProfesor = () => {
     );
 }
 
-
-
-const style = {
-    display: 'flex',
-    justifyContent: 'center'
-}
 
 export default ClasesProfesor;

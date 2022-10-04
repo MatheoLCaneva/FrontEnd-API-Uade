@@ -26,7 +26,7 @@ const Selector = ({ variable, variable1, variable2, variable3 }) => {
                 >
                     <MenuItem value={`${variable1}`}>{variable1}</MenuItem>
                     <MenuItem value={`${variable2}`}>{variable2}</MenuItem>
-                    {variable3 != undefined &&
+                    {variable3 !== undefined &&
                         <MenuItem value={`${variable3}`}>{variable3}</MenuItem>
 
                     }

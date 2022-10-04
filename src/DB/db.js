@@ -25,6 +25,8 @@ const comentarios = [
     // {idMateria: "Geo1", comentarios: [ {comentario: "Aprobe, aprendí y entendí todo, un genio!", usuario: "Tomás"}, {comentario: "Vale cada minuto, un lujo", usuario: "Luciana"}]}
 ]
 
+const usuario = {nombre: "Matheo", apellido: "Caneva", mail: "matheocaneva@gmail.com", telefono: "12345678"}
+
 export const getClases = (tiempo) => {
     return new Promise ((resolve, reject) => {
         setTimeout(() =>{
@@ -40,3 +42,5 @@ export const getComentarios = (tiempo) => {
         }, tiempo)
     })
 }
+
+export default usuario

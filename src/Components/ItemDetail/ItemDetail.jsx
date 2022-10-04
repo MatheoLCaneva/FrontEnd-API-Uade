@@ -38,7 +38,7 @@ const ItemDetail = ({ id, nombre, apellido, precio, materia, tipo, frecuencia, d
     }
 
     useEffect(() => {
-        getComentarios(2000).then(response => {
+        getComentarios().then(response => {
             setComentarios(response.find(res => res.idMateria == id).comentarios)
         })
     }, [])
@@ -61,14 +61,8 @@ const ItemDetail = ({ id, nombre, apellido, precio, materia, tipo, frecuencia, d
                     <TextField sx={inputs} id="outlined-basic" label="Apellido" variant="outlined" />
                     <TextField sx={inputs} id="outlined-basic" label="Mail" variant="outlined" />
                     <TextField sx={inputs} id="outlined-basic" label="Teléfono" variant="outlined" />
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <TimePicker
-                            label="Time"
-                            value={value}
-                            onChange={handleChange}
-                            renderInput={(params) => <TextField {...params} />}
-                        />
-                    </LocalizationProvider>
+                    <Button style={{display: "block"}} variant="contained">Contratar</Button>
+
                 </Box>
             </Modal>
             <div>

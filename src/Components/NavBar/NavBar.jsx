@@ -8,19 +8,21 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
+import './NavBar.css'
+
 
 const pages = ['Precios', 'Zona', 'Nivel'];
-const settings = ['Perfil', 'Notificaciones', 'Iniciar Sesión'];
+const settings = ['Clases', 'Perfil', 'Notificaciones', 'Iniciar/Cerrar Sesión'];
 
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
+  
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -87,11 +89,6 @@ const NavBar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -114,15 +111,6 @@ const NavBar = () => {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -148,9 +136,9 @@ const NavBar = () => {
               onClose={handleCloseUserMenu}
             >
               {
-                <MenuItem key={settings[0]}>
+                <Link className='link' to={'/ClasesProfesor'}><MenuItem key={settings[0]}>
                   <Typography textAlign="center">{settings[0]}</Typography>
-                </MenuItem>
+                </MenuItem></Link>
               }
 
               {
@@ -161,15 +149,15 @@ const NavBar = () => {
 
               {
                 <MenuItem key={settings[2]}>
-                  <Link style={{textDecoration: "none"}} to={"/Login"}><Typography textAlign="center">{settings[2]}</Typography></Link>
+                  <Link className='link' style={{ textDecoration: "none" }} to={"/Notificaciones"}><Typography textAlign="center">{settings[2]}</Typography></Link>
                 </MenuItem>
               }
 
-              {/* settings.map((setting) => (
-              <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">{setting}</Typography>
-              </MenuItem>
-              ))} */}
+              {
+                <MenuItem key={settings[3]}>
+                  <Link className='link' style={{ textDecoration: "none" }} to={"/Login"}><Typography textAlign="center">{settings[3]}</Typography></Link>
+                </MenuItem>
+              }
             </Menu>
           </Box>
         </Toolbar>

@@ -8,6 +8,7 @@ import Select from '@mui/material/Select';
 const Selector = ({ variable, variable1, variable2, variable3 }) => {
     const [tipo, setTipo] = React.useState('');
 
+
     const handleChange = (event) => {
         setTipo(event.target.value);
     };
@@ -25,6 +26,10 @@ const Selector = ({ variable, variable1, variable2, variable3 }) => {
                 >
                     <MenuItem value={`${variable1}`}>{variable1}</MenuItem>
                     <MenuItem value={`${variable2}`}>{variable2}</MenuItem>
+                    {variable3 != undefined &&
+                        <MenuItem value={`${variable3}`}>{variable3}</MenuItem>
+
+                    }
                 </Select>
             </FormControl>
         </Box>

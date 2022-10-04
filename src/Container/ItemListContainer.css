@@ -1,13 +1,17 @@
-.filtro-contenedor{
+.filtro-contenedor {
     display: flex;
     margin: auto;
 }
 
-.filtros{
+.filtros {
     width: 87%;
     margin: auto;
 }
 
-.filtro{ 
+.filtro {
     margin: 0 10px
+}
+
+* {
+    font-family: 'Montserrat', sans-serif;
 }

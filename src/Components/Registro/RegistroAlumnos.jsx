@@ -118,7 +118,7 @@ const RegistroAlumnos = () => {
 
 
 
-                    <Button type='submit' variant='contained' color='primary'>Registrarse</Button>
+                    <Button href='/' type='submit' variant='contained' color='primary'>Registrarse</Button>
                 </form>
             </Paper>
         </Grid>

@@ -27,7 +27,7 @@ const Item = ({ nombre, apellido, precio, materia, tipo, frecuencia, duracion, c
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                <Link style={{textDecoration: "none"}} to={`/clase/${id}`}><Button size="small" color="primary">
+                <Link style={{textDecoration: "none"}} to={`/clase/${id}`}><Button size="small" color="primary" variant='text'>
                     Ver mas de esta clase
                 </Button></Link>
             </CardActions>

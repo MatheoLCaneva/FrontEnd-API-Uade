@@ -25,7 +25,7 @@ const comentarios = [
     // {idMateria: "Geo1", comentarios: [ {comentario: "Aprobe, aprendí y entendí todo, un genio!", usuario: "Tomás"}, {comentario: "Vale cada minuto, un lujo", usuario: "Luciana"}]}
 ]
 
-const usuario = {nombre: "Matheo", apellido: "Caneva", mail: "matheocaneva@gmail.com", telefono: "12345678"}
+const alumno = {nombre: "Matheo", apellido: "Caneva", mail: "matheocaneva@gmail.com", telefono: "12345678", nacimiento: "27/02/2002", rol: "alumno"}
 
 export const getClases = (tiempo) => {
     return new Promise ((resolve, reject) => {
@@ -43,4 +43,5 @@ export const getComentarios = (tiempo) => {
     })
 }
 
-export default usuario
+export default alumno;
+export const profesor = {nombre: "Ruben", apellido: "Lopez", mail: "rblopez@gmail.com", telefono: "987654321", nacimiento: "19/05/1973", titulo: "Ingeniero Industrial", rol: "profesor", experiencia: "2"}

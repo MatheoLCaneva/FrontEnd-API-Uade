@@ -2,7 +2,6 @@ import ItemDetail from "../ItemDetail/ItemDetail";
 import { getClases } from "../../DB/db";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { LoadingButton } from '@mui/lab';
 import CircularIndeterminate from "../Loader/Loader";
 
 import "./ItemDetailContainer.css"

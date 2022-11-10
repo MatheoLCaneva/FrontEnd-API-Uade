@@ -7,7 +7,7 @@ import { useState } from "react"
 
 const Perfil = () => {
 
-    const [rol, setRol] = useState("profesor")
+    const [rol, setRol] = useState("alumno")
 
     if (rol === "profesor") {
         return (

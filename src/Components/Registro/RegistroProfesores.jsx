@@ -1,6 +1,8 @@
 import * as React from 'react'
-import { Grid, Paper, Avatar, Typography, TextField, Button } from "@mui/material"
+import { Grid, Paper, Avatar, Typography, TextField, Button, Input } from "@mui/material"
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import { useForm } from 'react-hook-form';
+import Swal from 'sweetalert2';
 
 
 const RegistroProfesores = () => {
@@ -10,6 +12,45 @@ const RegistroProfesores = () => {
     const marginTop = { marginTop: 5 }
     const TextfieldStyle = { margin: '3px 0' }
 
+    const { register, handleSubmit } = useForm()
+
+
+    const handleRegisterProfesor = (event, e) => {
+        var contraseña = document.querySelector('#password').value
+        var repContraseña = document.querySelector('#confirmPassword').value
+        if (contraseña === repContraseña) {
+            event.rol = 'Profesor'
+
+            try {
+                fetch('http://localhost:4000/users/registration', {
+                    method: 'post',
+                    headers: { 'Content-Type': 'application/json' },
+                    mode: 'cors',
+                    body: JSON.stringify(event)
+                }).then(
+                    (response) => response.json()
+                ).then(data => {
+                    sessionStorage.setItem('token', data.createdUser)
+                })
+
+                e.target.reset()
+            } catch (err) {
+                console.log(err)
+            }
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: 'Las contraseñas no coinciden',
+                icon: 'error',
+                timer: 2000,
+                timerProgressBar: true,
+
+            })
+        }
+
+
+
+    }
     return (
         <Grid>
             <Paper style={paperStyle}>
@@ -20,17 +61,18 @@ const RegistroProfesores = () => {
                     <h2 style={headerStyle}>Registro Profesores</h2>
                     <Typography variant='caption' gutterBottom>Ingrese sus datos para crear una cuenta</Typography>
                 </Grid>
-                <form>
-                    <TextField fullWidth label='Nombre' placeholder="Nombre" style={TextfieldStyle} />
-                    <TextField fullWidth label='Apellido' placeholder="Apellido" style={TextfieldStyle} />
-                    <TextField fullWidth label='Email' placeholder="Email" style={TextfieldStyle} />
-                    <TextField fullWidth label='Telefono' placeholder="Telefono" style={TextfieldStyle} />
-                    <TextField fullWidth label='Password' placeholder="Enter your password" style={TextfieldStyle} />
-                    <TextField fullWidth label='Confirm Password' placeholder="Confirm your password" style={TextfieldStyle} />
-                    <TextField fullWidth label='Titulo' placeholder="Titulo" style={TextfieldStyle} />
-                    <TextField fullWidth label='Experiencia' placeholder="Experiencia" style={TextfieldStyle} />
-
-
+                <form onSubmit={handleSubmit(handleRegisterProfesor)}>
+                    <TextField required fullWidth label='Nombre' placeholder="Nombre" style={TextfieldStyle} {...register('name')} />
+                    <TextField required fullWidth label='Apellido' placeholder="Apellido" style={TextfieldStyle} {...register('apellido')} />
+                    <TextField required fullWidth label='Email' placeholder="Email" style={TextfieldStyle} {...register('email')} />
+                    <TextField required fullWidth label='Telefono' placeholder="Telefono" style={TextfieldStyle} {...register('tel')} />
+                    <TextField required fullWidth label='Password' placeholder="Contraseña" type='password' style={TextfieldStyle} id='password' {...register('password')} />
+                    <TextField required fullWidth label='Confirm Password' placeholder="Repetir Contraseña" type='password' style={TextfieldStyle} id='confirmPassword' />
+                    <TextField required fullWidth label='Titulo' placeholder="Titulo" style={TextfieldStyle} {...register('titulo')} />
+                    <TextField required fullWidth label='Experiencia' placeholder="Experiencia" style={TextfieldStyle} {...register('experiencia')} />
+                    <p>Foto de Perfil</p>
+                    
+                    <Input required accept='image/*' id='imagen' type='file' label='Foto de Perfil' style={TextfieldStyle} />
                     <Button type='submit' variant='contained' style={marginTop} color='primary'>Registrarse</Button>
                 </form>
             </Paper>

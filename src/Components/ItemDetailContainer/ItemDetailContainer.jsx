@@ -9,19 +9,24 @@ import "./ItemDetailContainer.css"
 const ItemDetailContainer = () => {
 
     const [clases, setClases] = useState()
-    const { id } = useParams()
+    const { _id } = useParams()
     const [cargando, setCargando] = useState(true)
+
+    console.log(_id)
 
     useEffect(() => {
         setCargando(true)
-        getClases(2000).then(response => {
-            setClases(response.find(res => res.id == id))
-        }).catch(error => {
-            console.log(error)
-        }).finally(
-            setTimeout(() => {
+        fetch('http://localhost:4000/classes/classById', {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ _id: _id })
+        }).then(
+            response => response.json()
+        ).then(
+            function (data) {
+                setClases(data.data.docs[0])
                 setCargando(false)
-            }, 2000)
+            }
         )
     }, [])
 

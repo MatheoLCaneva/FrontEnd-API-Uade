@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-const Selector = ({ variable, variable1, variable2, variable3 }) => {
+const Selector = ({ variable, variable1, variable2, variable3, ID }) => {
     const [tipo, setTipo] = React.useState('');
 
 
@@ -19,11 +19,14 @@ const Selector = ({ variable, variable1, variable2, variable3 }) => {
                 <InputLabel id="demo-simple-select-label">{variable}</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
-                    id="demo-simple-select"
+                    id={ID}
                     value={tipo}
                     label={variable}
                     onChange={handleChange}
                 >
+                    <MenuItem value="">
+                        <em>None</em>
+                    </MenuItem>
                     <MenuItem value={`${variable1}`}>{variable1}</MenuItem>
                     <MenuItem value={`${variable2}`}>{variable2}</MenuItem>
                     {variable3 !== undefined &&

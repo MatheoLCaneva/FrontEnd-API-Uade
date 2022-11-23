@@ -1,6 +1,8 @@
 import * as React from 'react'
-import { Grid, Paper, Avatar, Typography, TextField, Button, MenuItem, Select, InputLabel, FormControl } from "@mui/material"
+import { Grid, Paper, Avatar, Typography, TextField, Button, MenuItem, Select, InputLabel, FormControl, OutlinedInput, Chip, Box } from "@mui/material"
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import { useForm } from 'react-hook-form';
+import Swal from 'sweetalert2';
 
 
 const RegistroAlumnos = () => {
@@ -8,11 +10,68 @@ const RegistroAlumnos = () => {
     const headerStyle = { margin: 0 }
     const avatarStyle = { backgroundColor: '#1bbd7e' }
     const TextfieldStyle = { margin: '3px 0' }
-    const [Estudios, SetEstudios] = React.useState('');
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                width: 250,
+            },
+        },
+    };
+
+    const { register, handleSubmit } = useForm()
+    const [estudioName, setEstudioName] = React.useState([]);
+
+    const estudios = ['Primario', 'Secundario', 'Terciario', 'Universitario']
 
     const handleChange = (event) => {
-        SetEstudios(event.target.value);
+        const {
+            target: { value },
+        } = event;
+        setEstudioName(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
     };
+
+    const handleRegisterUser = (event) => {
+        // event.preventDefault()
+        var contraseña = document.querySelector('#password').value
+        var repContraseña = document.querySelector('#confirmPassword').value
+        if (contraseña === repContraseña) {
+            event.rol = 'Estudiante'
+
+            try {
+                fetch('http://localhost:4000/users/registration', {
+                    method: 'post',
+                    headers: { 'Content-Type': 'application/json' },
+                    mode: 'cors',
+                    body: JSON.stringify(event)
+                }).then(
+                    (response) => response.json()
+                ).then(data => {
+                    localStorage.setItem('token', data.createdUser)
+                })
+            } catch (err) {
+                console.log(err)
+            }
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: 'Las contraseñas no coinciden',
+                icon: 'error',
+                timer: 2000,
+                timerProgressBar: true,
+
+            })
+        }
+
+
+
+
+    }
 
     return (
         <Grid>
@@ -24,100 +83,51 @@ const RegistroAlumnos = () => {
                     <h2 style={headerStyle}>Registro Alumnos</h2>
                     <Typography variant='caption' gutterBottom>Ingrese sus datos para crear una cuenta</Typography>
                 </Grid>
-                <form>
-                    <TextField fullWidth label='Nombre' placeholder="Nombre" style={TextfieldStyle} />
-                    <TextField fullWidth label='Apellido' placeholder="Apellido" style={TextfieldStyle} />
-                    <TextField fullWidth label='Nombre' placeholder="Nombre" style={TextfieldStyle} />
-                    <TextField fullWidth label='Apellido' placeholder="Apellido" style={TextfieldStyle} />
-                    <TextField fullWidth label='Email' placeholder="Email" style={TextfieldStyle} />
-                    <TextField fullWidth label='Telefono' placeholder="Telefono" style={TextfieldStyle} />
-                    <TextField fullWidth label='Password' placeholder="Enter your password" style={TextfieldStyle} />
-                    <TextField fullWidth label='Confirm Password' placeholder="Confirm your password" style={TextfieldStyle} />
-                    <TextField fullWidth label='Fecha Nacimiento' placeholder="Fecha Nacimiento" style={TextfieldStyle} />
+                <form onSubmit={handleSubmit(handleRegisterUser)}>
+                    <TextField required fullWidth label='Nombre' placeholder="Nombre" id='nombre' {...register('name')} />
+                    <TextField required fullWidth label='Apellido' placeholder="Apellido" style={TextfieldStyle} id='apellido' {...register('apellido')} />
+                    <TextField required fullWidth label='Email' placeholder="Email" style={TextfieldStyle} id='email' {...register('email')} />
+                    <TextField required fullWidth label='Telefono' placeholder="Telefono" style={TextfieldStyle} id='telefono' {...register('tel')} />
+                    <TextField required fullWidth label='Password' placeholder="Enter your password" type="password" style={TextfieldStyle} id='password' {...register('password')} />
+                    <TextField required fullWidth label='Confirm Password' placeholder="Confirm your password" type="password" style={TextfieldStyle} id='confirmPassword' />
+                    <TextField required fullWidth label='Fecha Nacimiento' placeholder="Fecha Nacimiento" style={TextfieldStyle} id='nacimiento' {...register('birth')} />
 
                     <p>Estudios</p>
 
                     <FormControl fullWidth>
-                       <InputLabel align="left" id="demo-simple-select-helper-label">Primarios</InputLabel>
-                        <Select fullWidth
-                            labelId="demo-simple-select-helper-label1"
-                            id="demo-simple-select-helper1"
-                            value={Estudios}
-                            label="Primario"
+                        <InputLabel id="demo-multiple-chip-label">Estudios</InputLabel>
+                        <Select
+                            {...register('estudios')}
+                            labelId="demo-multiple-chip-label"
+                            id="demo-multiple-chip"
+                            multiple
+                            value={estudioName}
                             onChange={handleChange}
+                            input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                            renderValue={(selected) => (
+                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                    {selected.map((value) => (
+                                        <Chip key={value} label={value} />
+                                    ))}
+                                </Box>
+                            )}
+                            MenuProps={MenuProps}
                         >
-                            <MenuItem value="Primarios">
-                                <em>Ninguno</em>
-                            </MenuItem>
-                            <MenuItem value={1}>En Curso</MenuItem>
-                            <MenuItem value={2}>Finalizados</MenuItem>
-                        </Select>
 
-                    </FormControl>
-                
+                            {estudios.map((estudio) => (
+                                <MenuItem
+                                    key={estudio}
+                                    value={estudio}
+                                >
+                                    {estudio}
+                                </MenuItem>
+                            ))}
 
-
-                    <FormControl fullWidth>
-                        <InputLabel align="left" id="demo-simple-select-helper-label">Secundarios</InputLabel>
-                        <Select fullWidth
-                            labelId="demo-simple-select-helper-label2"
-                            id="demo-simple-select-helper2"
-                            value={Estudios}
-                            label="Secundarios"
-                            onChange={handleChange}
-                        >
-                            <MenuItem value="">
-                                <em>Ninguno</em>
-                            </MenuItem>
-                            <MenuItem value={1}>En Curso</MenuItem>
-                            <MenuItem value={2}>Finalizados</MenuItem>
                         </Select>
 
                     </FormControl>
 
-
-
-                    <FormControl fullWidth>
-                        <InputLabel align="left" id="demo-simple-select-helper-label">Terciarios</InputLabel>
-                        <Select fullWidth
-                            labelId="demo-simple-select-helper-label3"
-                            id="demo-simple-select-helper3"
-                            value={Estudios}
-                            label="Terciarios"
-                            onChange={handleChange}
-                        >
-                            <MenuItem value="">
-                                <em>Ninguno</em>
-                            </MenuItem>
-                            <MenuItem value={1}>En Curso</MenuItem>
-                            <MenuItem value={2}>Finalizados</MenuItem>
-                        </Select>
-
-
-                    </FormControl>
-
-
-                    <FormControl fullWidth>
-                        <InputLabel align="left" id="demo-simple-select-helper-label">Universitarios</InputLabel>
-                        <Select fullWidth
-                            labelId="demo-simple-select-helper-label4"
-                            id="demo-simple-select-helper4"
-                            value={Estudios}
-                            label="Universitarios"
-                            onChange={handleChange}
-                        >
-                            <MenuItem value="">
-                                <em>Ninguno</em>
-                            </MenuItem>
-                            <MenuItem value={1}>En Curso</MenuItem>
-                            <MenuItem value={2}>Finalizados</MenuItem>
-                        </Select>
-
-                    </FormControl>
-
-
-
-                    <Button href='/' type='submit' variant='contained' color='primary'>Registrarse</Button>
+                    <Button type='submit' variant='contained' color='primary'>Registrarse</Button>
                 </form>
             </Paper>
         </Grid>

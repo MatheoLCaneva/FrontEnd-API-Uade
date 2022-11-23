@@ -13,14 +13,15 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
 import './NavBar.css'
+import ContextoAuth from '../../Context/AuthContext';
 
 
-const settings = ['Clases', 'Perfil', 'Notificaciones', 'Iniciar/Cerrar Sesión'];
+const opcionesProfesor = ['Notificaciones', 'Clases'];
 
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
+  const { user, isLogged } = React.useContext(ContextoAuth)
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -41,23 +42,23 @@ const NavBar = () => {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            Profesores
-          </Typography>
+          <Link className='link' to='/' style={{ color: 'white' }}>
+            <Typography
+              variant="h6"
+              noWrap
+              sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              Profesores
+            </Typography>
+          </Link>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -134,36 +135,39 @@ const NavBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {
-                <Link className='link' to={'/ClasesProfesor'}><MenuItem key={settings[0]}>
-                  <Typography textAlign="center">{settings[0]}</Typography>
-                </MenuItem></Link>
-              }
 
               {
                 <Link className='link' to={'/Perfil'}>
-                  <MenuItem key={settings[1]}>
-                    <Typography textAlign="center">{settings[1]}</Typography>
+                  <MenuItem key='Perfil'>
+                    <Typography textAlign="center">Perfil</Typography>
                   </MenuItem>
                 </Link>
               }
-
               {
-                <MenuItem key={settings[2]}>
-                  <Link className='link' style={{ textDecoration: "none" }} to={"/Notificaciones"}><Typography textAlign="center">{settings[2]}</Typography></Link>
-                </MenuItem>
+                isLogged
+                  ? user.user.rol === 'Profesor' ?
+                    opcionesProfesor.map((opcion) => (
+                      <Link key={opcion} className='link' to={`/${opcion}`}>
+                        <MenuItem  onClick={handleCloseNavMenu}>
+                          <Typography textAlign="center">{opcion}</Typography>
+                        </MenuItem>
+                      </Link>
+                    ))
+                    : null
+                  :
+                  <Link className='link' to={'/Login'}>
+                    <MenuItem key='Perfil'>
+                      <Typography textAlign="center">Iniciar Sesion</Typography>
+                    </MenuItem>
+                  </Link>
               }
 
-              {
-                <MenuItem key={settings[3]}>
-                  <Link className='link' style={{ textDecoration: "none" }} to={"/Login"}><Typography textAlign="center">{settings[3]}</Typography></Link>
-                </MenuItem>
-              }
+
             </Menu>
           </Box>
         </Toolbar>
       </Container>
-    </AppBar>
+    </AppBar >
   );
 };
 export default NavBar;

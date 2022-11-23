@@ -12,6 +12,10 @@ export const Auth = ({ children }) => {
         setStatusLogin(true)
     }
 
+    const checkUser = () => {
+        
+    }
+
     return (
         <ContextoAuth.Provider value={{
             user,

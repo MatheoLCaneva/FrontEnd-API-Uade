@@ -43,6 +43,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
         })
     }, [])
 
+
     console.log(comentarios.map(comentario => console.log(comentario.id)))
 
     const handleContact = (event) => {

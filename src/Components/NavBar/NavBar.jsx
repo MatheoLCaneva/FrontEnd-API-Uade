@@ -148,12 +148,16 @@ const NavBar = () => {
                   ? user.user.rol === 'Profesor' ?
                     opcionesProfesor.map((opcion) => (
                       <Link key={opcion} className='link' to={`/${opcion}`}>
-                        <MenuItem  onClick={handleCloseNavMenu}>
+                        <MenuItem onClick={handleCloseNavMenu}>
                           <Typography textAlign="center">{opcion}</Typography>
                         </MenuItem>
                       </Link>
                     ))
-                    : null
+                    : <Link className='link' to={'/Login'}>
+                      <MenuItem key='Perfil'>
+                        <Typography textAlign="center">Iniciar Sesion</Typography>
+                      </MenuItem>
+                    </Link>
                   :
                   <Link className='link' to={'/Login'}>
                     <MenuItem key='Perfil'>

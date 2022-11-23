@@ -20,6 +20,7 @@
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.2.1",
     "cloudinary": "^1.32.0",
+    "cloudinary-react": "^1.8.1",
     "dayjs": "^1.11.5",
     "moment": "^2.29.4",
     "mui": "^0.0.1",

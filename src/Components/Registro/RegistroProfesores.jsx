@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Grid, Paper, Avatar, Typography, TextField, Button, Input } from "@mui/material"
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 import Swal from 'sweetalert2';
 
 
@@ -11,17 +12,29 @@ const RegistroProfesores = () => {
     const avatarStyle = { backgroundColor: '#1bbd7e' }
     const marginTop = { marginTop: 5 }
     const TextfieldStyle = { margin: '3px 0' }
-
+    const [imgUser, setImgUser] = useState('')
     const { register, handleSubmit } = useForm()
 
 
-    const handleRegisterProfesor = (event, e) => {
+    const handleRegisterProfesor = async (event, e) => {
         var contraseña = document.querySelector('#password').value
         var repContraseña = document.querySelector('#confirmPassword').value
         if (contraseña === repContraseña) {
             event.rol = 'Profesor'
+            console.log(event)
 
             try {
+                if (imgUser) {
+                    const data = new FormData();
+                    data.append('file', imgUser.url)
+                    data.append('upload_preset', 'utvjoiww')
+                    data.append('cloud_name', 'matheocaneva')
+                    console.log('data', data)
+                    const res = await fetch('https://api.cloudinary.com/v1_1/matheocaneva/upload', {
+                        method: 'post',
+                        body: data
+                    })
+                }
                 fetch('http://localhost:4000/users/registration', {
                     method: 'post',
                     headers: { 'Content-Type': 'application/json' },
@@ -33,7 +46,6 @@ const RegistroProfesores = () => {
                     sessionStorage.setItem('token', data.createdUser)
                 })
 
-                e.target.reset()
             } catch (err) {
                 console.log(err)
             }
@@ -71,8 +83,8 @@ const RegistroProfesores = () => {
                     <TextField required fullWidth label='Titulo' placeholder="Titulo" style={TextfieldStyle} {...register('titulo')} />
                     <TextField required fullWidth label='Experiencia' placeholder="Experiencia" style={TextfieldStyle} {...register('experiencia')} />
                     <p>Foto de Perfil</p>
-                    
-                    <Input required accept='image/*' id='imagen' type='file' label='Foto de Perfil' style={TextfieldStyle} />
+
+                    <Input required accept='image/*' onChange={(e) => setImgUser(e.target.value)} id='imagen' type='file' label='Foto de Perfil' style={TextfieldStyle} />
                     <Button type='submit' variant='contained' style={marginTop} color='primary'>Registrarse</Button>
                 </form>
             </Paper>

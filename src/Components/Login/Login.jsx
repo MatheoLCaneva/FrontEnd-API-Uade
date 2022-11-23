@@ -39,6 +39,7 @@ const Login = () => {
                     if (data.message === 'Error en la contraseña' || data.message === 'Invalid username or password') { alert('Usuario o contraseña incorrectos') }
                     else {
                         loginUser(data.loginUser)
+                        localStorage.setItem('user', JSON.stringify(data.loginUser))
                         nav('/')
                     }
                 }

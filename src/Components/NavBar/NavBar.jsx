@@ -16,8 +16,7 @@ import './NavBar.css'
 import ContextoAuth from '../../Context/AuthContext';
 
 
-const opcionesProfesor = ['Notificaciones', 'Clases'];
-
+const opcionesProfesor = ['Perfil', ' Notificaciones', 'Clases'];
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -135,14 +134,6 @@ const NavBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-
-              {
-                <Link className='link' to={'/Perfil'}>
-                  <MenuItem key='Perfil'>
-                    <Typography textAlign="center">Perfil</Typography>
-                  </MenuItem>
-                </Link>
-              }
               {
                 isLogged
                   ? user.user.rol === 'Profesor' ?
@@ -153,9 +144,10 @@ const NavBar = () => {
                         </MenuItem>
                       </Link>
                     ))
-                    : <Link className='link' to={'/Login'}>
+                    :
+                    <Link Link className='link' to={'/Perfil'}>
                       <MenuItem key='Perfil'>
-                        <Typography textAlign="center">Iniciar Sesion</Typography>
+                        <Typography textAlign="center">Perfil</Typography>
                       </MenuItem>
                     </Link>
                   :

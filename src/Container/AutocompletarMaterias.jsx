@@ -12,7 +12,7 @@ const AutocompletarMaterias = () => {
             disablePortal
             id="autoCompletar"
             options={materias}
-            sx={{ width: 300 }}
+            sx={{ width: 300, marginBottom: '20px' }}
             renderInput={(params) => <TextField {...params} label="Materia" />}
         />
     );

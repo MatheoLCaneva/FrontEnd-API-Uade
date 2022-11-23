@@ -10,13 +10,21 @@ import { useEffect } from 'react';
 import dayjs from 'dayjs';
 import { getComentarios } from '../../DB/db';
 import Comentario from '../Comentario/Comentario';
+import ContextoAuth from '../../Context/AuthContext';
+import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, descripcionClase, descripcionProfesor }) => {
+const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, descripcion, descripcionProfesor }) => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    const [value, setValue] = useState(dayjs('2014-08-18T00:00:00'));
+    const [value, setValue] = useState(dayjs('2022-08-18T00:00:00'));
     const [comentarios, setComentarios] = useState([])
+    const nav = useNavigate()
+
+    const { user, isLogged } = useContext(ContextoAuth)
+
     const handleChange = (newValue) => {
         setValue(newValue);
     };
@@ -37,59 +45,115 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
         marginBottom: '20px'
     }
 
-    useEffect(() => {
-        getComentarios().then(response => {
-            setComentarios(response.find(res => res.idMateria == id).comentarios)
-        })
-    }, [])
+    // useEffect(() => {
+    //     getComentarios().then(response => {
+    //         setComentarios(response.find(res => res.idMateria == id).comentarios)
+    //     })
+    // }, [])
 
-
-    console.log(comentarios.map(comentario => console.log(comentario.id)))
 
     const handleContact = (event) => {
         event.preventDefault()
-        console.log(event.target)
+        // const estudiante = {
+        //     name: 
+        // }
+        console.log(event.target.nombre.value)
+    }
+
+    if (isLogged) {
+        return (
+            <div style={{ display: "flex" }}>
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Typography style={{ marginBottom: '10px' }} id="modal-modal-title" variant="h5" component="h2">
+                            Contactar Profesor
+                        </Typography>
+                        <form onSubmit={handleContact}>
+                            <TextField required disabled sx={inputs} value={user.user.name} name='nombre' id="outlined-basic" label="Nombre" variant="outlined" />
+                            <TextField required disabled sx={inputs} value='Caneva' id="outlined-basic" name='apellido' label="Apellido" variant="outlined" />
+                            <TextField required disabled sx={inputs} value={user.user.email} id="outlined-basic" nombre='email' label="Mail" variant="outlined" />
+                            <TextField required disabled sx={inputs} value={user.user.tel} id="outlined-basic" name='tel' label="Teléfono" variant="outlined" />
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <TimePicker
+                                    label="Horario"
+                                    value={value}
+                                    onChange={handleChange}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider>
+
+                            <Button type='submit' style={{ display: "block" }} variant="contained">Contratar</Button>
+                        </form>
+                    </Box>
+                </Modal>
+                <div>
+                    <div className="producto">
+                        <div className="producto-info">
+                            <h2>{descripcion}</h2>
+                        </div>
+                    </div>
+                    <div className="acerca-profesor producto">
+                        <h2>Acerca de {profesor.name}</h2>
+                        <p>{descripcionProfesor}</p>
+                    </div>
+                    <div className="producto comentarios">
+                        <h2>Comentarios</h2>
+                        <ul className="listado">
+                            {comentarios.map(comentario => <Comentario key={comentario.id} {...comentario} />)}
+                        </ul>
+                    </div>
+                </div>
+
+                <div className='profesor'>
+                    <div className='card-profesor'>
+                        <div className="datos-profesor">
+                            <div className="imagen">
+                                <img style={{ maxWidth: "100%" }} src={img} alt="" />
+                            </div>
+                            <div className="nombre">
+                                <p>{profesor.nombre}</p>
+                            </div>
+                            <div className="info">
+                                <ul className='info-lista'>
+                                    <li>Precio por hora:  ${precio}</li>
+                                    <li>Tipo de clase: {tipo}</li>
+                                    <li>Frecuencia: {frecuencia}</li>
+                                </ul>
+                                <div className="contacto">
+                                    {
+                                        isLogged
+                                            ? <Button size='medium' className='btnContacto' variant="contained" onClick={handleOpen}>Contactar Profe</Button>
+                                            : <Link style={{ textDecoration: 'none' }} to={'/login'}> <Button size='medium' className='btnContacto' variant="contained">Iniciar Sesion</Button></Link>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div >
+        )
+    }
+
+    else {
+
     }
 
     return (
         <div style={{ display: "flex" }}>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={style}>
-                    <Typography style={{ marginBottom: '10px' }} id="modal-modal-title" variant="h5" component="h2">
-                        Contactar Profesor
-                    </Typography>
-                    <form onSubmit={handleContact}>
-                        <TextField required sx={inputs} id="outlined-basic" label="Nombre" variant="outlined" />
-                        <TextField required sx={inputs} id="outlined-basic" label="Apellido" variant="outlined" />
-                        <TextField required sx={inputs} id="outlined-basic" label="Mail" variant="outlined" />
-                        <TextField required sx={inputs} id="outlined-basic" label="Teléfono" variant="outlined" />
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <TimePicker
-                                label="Horario"
-                                value={value}
-                                onChange={handleChange}
-                                renderInput={(params) => <TextField {...params} />}
-                            />
-
-                        </LocalizationProvider>
-
-                        <Button type='submit' style={{ display: "block" }} variant="contained">Contratar</Button>
-                    </form>
-                </Box>
-            </Modal>
             <div>
                 <div className="producto">
                     <div className="producto-info">
-                        <h2>{descripcionClase}</h2>
+                        <h2>{descripcion}</h2>
                     </div>
                 </div>
                 <div className="acerca-profesor producto">
-                    <h2>Acerca de {profesor.nombre}</h2>
+                    <h2>Acerca de {profesor.name}</h2>
                     <p>{descripcionProfesor}</p>
                 </div>
                 <div className="producto comentarios">
@@ -116,7 +180,12 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                                 <li>Frecuencia: {frecuencia}</li>
                             </ul>
                             <div className="contacto">
-                                <Button size='medium' className='btnContacto' variant="contained" onClick={handleOpen}>Contactar Profe</Button>
+                                {
+                                    isLogged
+                                        ? <Button size='medium' className='btnContacto' variant="contained" onClick={handleOpen}>Contactar Profe</Button>
+                                        : <Link style={{ textDecoration: 'none' }} to={'/login'}> <Button size='medium' className='btnContacto' variant="contained">Iniciar Sesion</Button></Link>
+                                }
+
                             </div>
                         </div>
                     </div>

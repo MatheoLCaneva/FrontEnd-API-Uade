@@ -2,24 +2,24 @@ import { Container, Stack, Typography, TextField, Divider, InputAdornment, Butto
 import "./Perfil.css"
 import foto from "../../assets/logo192.png"
 import alumno from "../../DB/db"
-import { profesor } from "../../DB/db"
-import { useState } from "react"
+import ContextoAuth from "../../Context/AuthContext"
+import { useContext } from "react"
 
 const Perfil = () => {
 
-    const [rol, setRol] = useState("alumno")
+    const { user } = useContext(ContextoAuth)
 
-    if (rol === "profesor") {
+    if (user.user.rol === "Profesor") {
         return (
             <Container maxWidth="md">
                 <Stack sx={{ mt: 3 }} divider={<Divider orientation="vertical" flexItem />} direction='row' justifyContent='space-around' className="usuarioContainer">
                     <Stack direction='column' alignItems='center' className="usuarioFoto">
-                        <img src={foto} alt="imgUsuario" width="60%" />
+                        <img src={user.user.imgUser} alt="imgUsuario" width="60%" />
                         <Typography variant="button">
-                            {profesor.nombre} {profesor.apellido}
+                            {user.user.name} 
                         </Typography>
                         <Typography variant="caption">
-                            {profesor.mail}
+                            {user.user.email}
                         </Typography>
                     </Stack>
                     <Stack direction='column' className="usuarioInfo">
@@ -28,19 +28,19 @@ const Perfil = () => {
                         </Typography>
                         <Stack spacing={2} direction='row' sx={{ mt: 3 }}>
                             <div className="labelNombre">
-                                <TextField required label='Nombre' defaultValue={profesor.nombre} />
+                                <TextField required label='Nombre' defaultValue={user.user.name} />
                             </div>
                             <div className="labelApellido">
-                                <TextField required label='Apellido' defaultValue={profesor.apellido} />
+                                <TextField required label='Apellido' defaultValue={user.user.apellido} />
                             </div>
                         </Stack>
 
                         <Stack spacing={2} direction='row' sx={{ mt: 3 }}>
                             <div className="labelNombre">
-                                <TextField required label='Mail' defaultValue={profesor.mail} />
+                                <TextField required label='Mail' defaultValue={user.user.email} />
                             </div>
                             <div className="labelApellido">
-                                <TextField required label='Teléfono' defaultValue={profesor.telefono} InputProps={{
+                                <TextField required label='Teléfono' defaultValue={user.user.tel} InputProps={{
                                     startAdornment: <InputAdornment position="start">+54</InputAdornment>,
                                 }} />
                             </div>
@@ -48,10 +48,10 @@ const Perfil = () => {
 
                         <Stack spacing={2} direction='row' sx={{ mt: 3 }}>
                             <div className="labelNombre">
-                                <TextField disabled label='Titulo' defaultValue={profesor.titulo} />
+                                <TextField disabled label='Titulo' defaultValue={user.user.title} />
                             </div>
                             <div className="labelApellido">
-                                <TextField disabled label='Experiencia' defaultValue={profesor.experiencia} InputProps={{
+                                <TextField disabled label='Experiencia' defaultValue={user.user.experience} InputProps={{
                                     endAdornment: <InputAdornment position="start">Años</InputAdornment>,
                                 }} />
                             </div>
@@ -66,7 +66,7 @@ const Perfil = () => {
     }
 
 
-    if (rol === "alumno") {
+    if (user.user.rol === "Estudiante") {
         return (
             <Container maxWidth="md">
                 <Stack sx={{ mt: 3 }} divider={<Divider orientation="vertical" flexItem />} direction='row' justifyContent='space-around' className="usuarioContainer">

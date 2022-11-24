@@ -14,27 +14,56 @@ const RegistroProfesores = () => {
     const TextfieldStyle = { margin: '3px 0' }
     const [imgUser, setImgUser] = useState('')
     const { register, handleSubmit } = useForm()
+    const [imagenes, setImagenes] = useState('')
+    const [fotoId, setFotoId] = useState(0)
 
+
+    const hanndleInput = (e) => {
+        let files = e.target.files;
+        let reader = new FileReader();
+        reader.onload = r => {
+            // console.log(r)
+            let newImagen = {
+                id: fotoId,
+                url: r.target.result
+            }
+
+            console.log(newImagen)
+
+            setImagenes(newImagen);
+        };
+        reader.readAsDataURL(files[0]);
+
+        setFotoId(fotoId + 1);
+
+    }
 
     const handleRegisterProfesor = async (event, e) => {
         var contraseña = document.querySelector('#password').value
         var repContraseña = document.querySelector('#confirmPassword').value
+        console.log(imgUser)
         if (contraseña === repContraseña) {
             event.rol = 'Profesor'
-            console.log(event)
 
             try {
-                if (imgUser) {
+                if (imagenes) {
+                    console.log(imagenes)
                     const data = new FormData();
-                    data.append('file', imgUser.url)
-                    data.append('upload_preset', 'utvjoiww')
+                    data.append('file', imagenes.url);
+                    data.append('upload_preset', 'utvjoiww');
                     data.append('cloud_name', 'matheocaneva')
-                    console.log('data', data)
-                    const res = await fetch('https://api.cloudinary.com/v1_1/matheocaneva/upload', {
-                        method: 'post',
-                        body: data
-                    })
+                    const res = await fetch(
+                        'https://api.cloudinary.com/v1_1/matheocaneva/image/upload',
+                        {
+                            method: 'POST',
+                            body: data
+                        }
+                    );
+                    const file = await res.json();
+                    console.log(file)
+                    event.imgUser = file.secure_url
                 }
+
                 fetch('http://localhost:4000/users/registration', {
                     method: 'post',
                     headers: { 'Content-Type': 'application/json' },
@@ -80,11 +109,12 @@ const RegistroProfesores = () => {
                     <TextField required fullWidth label='Telefono' placeholder="Telefono" style={TextfieldStyle} {...register('tel')} />
                     <TextField required fullWidth label='Password' placeholder="Contraseña" type='password' style={TextfieldStyle} id='password' {...register('password')} />
                     <TextField required fullWidth label='Confirm Password' placeholder="Repetir Contraseña" type='password' style={TextfieldStyle} id='confirmPassword' />
-                    <TextField required fullWidth label='Titulo' placeholder="Titulo" style={TextfieldStyle} {...register('titulo')} />
-                    <TextField required fullWidth label='Experiencia' placeholder="Experiencia" style={TextfieldStyle} {...register('experiencia')} />
+                    <TextField required fullWidth label='Titulo' placeholder="Titulo" style={TextfieldStyle} {...register('title')} />
+                    <TextField required fullWidth label='Experiencia' placeholder="Experiencia" style={TextfieldStyle} {...register('experience')} />
                     <p>Foto de Perfil</p>
 
-                    <Input required accept='image/*' onChange={(e) => setImgUser(e.target.value)} id='imagen' type='file' label='Foto de Perfil' style={TextfieldStyle} />
+                    {/* <input accept='image/*' onChange={handleInput} id='imagen' type='file' label='Foto de Perfil' style={TextfieldStyle} /> */}
+                    <input accept="image/*" type="file" onChange={hanndleInput} />
                     <Button type='submit' variant='contained' style={marginTop} color='primary'>Registrarse</Button>
                 </form>
             </Paper>

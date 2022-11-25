@@ -4,7 +4,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import ContextoAuth from "../../Context/AuthContext";
-import { useHref, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 // import * as Yup from 'yup';
 
@@ -18,7 +18,7 @@ const Login = () => {
 
     const { loginUser, user } = useContext(ContextoAuth)
 
-    const handleLogin = (event) => {
+    const handleLogin = async (event) => {
         event.preventDefault()
         let bodyUser = {
             email: event.target.email.value,
@@ -27,7 +27,7 @@ const Login = () => {
 
 
         try {
-            fetch('http://localhost:4000/users/login', {
+            await fetch('http://localhost:4000/users/login', {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
                 mode: 'cors',
@@ -38,9 +38,9 @@ const Login = () => {
                 data => {
                     if (data.message === 'Error en la contraseña' || data.message === 'Invalid username or password') { alert('Usuario o contraseña incorrectos') }
                     else {
-                        loginUser(data.loginUser)
-                        console.log(data.loginUser)
-                        localStorage.setItem('user', JSON.stringify(data))
+                        loginUser(data.loginUser.user)
+                        localStorage.setItem('user', JSON.stringify(data.loginUser.user))
+                        localStorage.setItem('token', JSON.stringify(data.loginUser.token))
                         nav('/')
                     }
                 }

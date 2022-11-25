@@ -6,14 +6,14 @@ import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 
-const Item = ({ nombre, apellido, precio, materia, tipo, frecuencia, duracion, calificacion, img, id, _id }) => {
+const Item = ({ nombre, apellido, precio, materia, tipo, frecuencia, duracion, calificacion, profesor, id, _id }) => {
     return (
         <Card sx={{ maxWidth: 345, borderRadius: "20px" }}>
             <CardActionArea>
                 <CardMedia
                     component="img"
                     height="140"
-                    image={img}
+                    image={profesor.imgUser}
                     alt="green iguana"
                 />
                 <CardContent>

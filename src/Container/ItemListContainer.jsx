@@ -29,7 +29,7 @@ const ItemListContainer = ({ mensaje }) => {
     const handleFiltro = (event) => {
         event.preventDefault()
         let autoCompletar = document.querySelector('#autoCompletar').value
-        if (autoCompletar == ''){autoCompletar = undefined}
+        if (autoCompletar === ''){autoCompletar = undefined}
         let filtroTipo = document.querySelector('#filtroTipo').firstChild.data
         let filtroFrecuencia = document.querySelector('#filtroFrecuencia').firstChild.data
         const obj = {
@@ -44,7 +44,7 @@ const ItemListContainer = ({ mensaje }) => {
 
 
     return (
-        <section>
+        <section className="sectionClasses">
             <h1 className="titulo" style={{ textAlign: "center", fontSize: "40px" }}>{mensaje}</h1>
             <div className="filtros">
                 <form onSubmit={handleFiltro}>

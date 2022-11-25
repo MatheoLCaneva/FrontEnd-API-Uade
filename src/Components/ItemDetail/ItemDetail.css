@@ -14,6 +14,7 @@
     margin: 30px;
     background-color: white;
     border-radius: 10px;
+    width: 50%;
 }
 
 .producto .imagen {
@@ -32,6 +33,7 @@
 .producto-info h2 {
     font-size: 40px;
     font-weight: bold;
+    text-align: center;
 }
 
 .nombre p, .info p{
@@ -73,4 +75,8 @@
 
 .inputsContacto {
     padding-bottom: 20px;
+}
+
+.imagenProfesor {
+    text-align: center;
 }

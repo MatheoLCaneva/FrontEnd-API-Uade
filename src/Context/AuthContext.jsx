@@ -16,11 +16,19 @@ export const Auth = ({ children }) => {
         
     }
 
+    const logOffUser = () => {
+        setUser('')
+        setStatusLogin(false)
+        localStorage.removeItem('user')
+        localStorage.removeItem('token')
+    }
+
     return (
         <ContextoAuth.Provider value={{
             user,
             loginUser,
-            isLogged
+            isLogged,
+            logOffUser
         }}>
             {children}
         </ContextoAuth.Provider>

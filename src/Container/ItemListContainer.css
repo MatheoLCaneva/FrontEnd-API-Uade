@@ -15,3 +15,8 @@
 * {
     font-family: 'Montserrat', sans-serif;
 }
+
+.sectionClasses {
+    width: 80%;
+    margin: auto;
+}

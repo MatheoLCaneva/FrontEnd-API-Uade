@@ -30,6 +30,8 @@ const ClasesProfesor = () => {
     const [idUpdate, setidUpdate] = useState('')
 
     const [openUpdate, setOpenUpdate] = useState(false);
+    
+
     const handleOpenUpdate = (e) => {
         let id = e.target.parentElement.id
         setidUpdate(id)
@@ -240,7 +242,7 @@ const ClasesProfesor = () => {
                     </form>
                 </Box>
             </Modal>
-            <Typography variant={{xs:'h3', sm:'h2'}} style={{ fontFamily: "'Montserrat', sans-serif", display: 'flex', justifyContent: 'center', margin: "30px 0" }}>Detalle de clases</Typography>
+            <Typography variant={{ xs: 'h3', sm: 'h2' }} style={{ fontFamily: "'Montserrat', sans-serif", display: 'flex', justifyContent: 'center', margin: "30px 0" }}>Detalle de clases</Typography>
             <Button variant="contained" color="primary" onClick={handleOpen}>
                 Nueva Clase
             </Button>
@@ -271,7 +273,7 @@ const ClasesProfesor = () => {
                                 <TableCell align="right">{row.frecuencia}</TableCell>
                                 <TableCell align="right">${row.precio}</TableCell>
 
-                                <TableCell align="right" id={row._id}><CreateIcon id={row._id} onClick={handleOpenUpdate} /></TableCell>
+                                <TableCell align="right" className={row.tipo} id={row._id}><CreateIcon id={row._id} className={row.tipo} onClick={handleOpenUpdate} /></TableCell>
                                 <TableCell id='eliminar' align="right" ><DeleteIcon id={row._id} onClick={deleteClass} /></TableCell>
 
                             </TableRow>

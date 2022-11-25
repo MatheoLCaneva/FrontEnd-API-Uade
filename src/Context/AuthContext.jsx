@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 
 const ContextoAuth = createContext()
@@ -7,13 +7,18 @@ export const Auth = ({ children }) => {
     const [user, setUser] = useState({})
     const [isLogged, setStatusLogin] = useState(false)
 
+    useEffect(() => {
+        const almacenado = JSON.parse(localStorage.getItem("user"))
+
+        if (almacenado) {
+            loginUser(almacenado)
+        }
+    }, [])
+
+
     const loginUser = (User) => {
         setUser(User)
         setStatusLogin(true)
-    }
-
-    const checkUser = () => {
-        
     }
 
     const logOffUser = () => {

@@ -68,7 +68,7 @@ const ClasesProfesor = () => {
             duracion: e.target.duracion.value + 'hs',
             precio: e.target.precio.value,
             descripcion: e.target.descripcion.value,
-            profesor: user.user,
+            profesor: user,
             profesormail: user.email
         }
 

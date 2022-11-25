@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 
 const Item = ({ nombre, apellido, precio, materia, tipo, frecuencia, duracion, calificacion, profesor, id, _id }) => {
+    console.log('profesor', profesor)
+    
     return (
         <Card sx={{ maxWidth: 345, borderRadius: "20px" }}>
             <CardActionArea>

@@ -7,7 +7,7 @@ import { Button } from "@mui/material";
 const ItemListContainer = ({ mensaje }) => {
     const [clases, setClases] = useState([])
     const [filtros, setFiltros] = useState({})
-
+    
     useEffect(() => {
 
         try {

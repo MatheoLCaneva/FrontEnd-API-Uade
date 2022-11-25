@@ -22,6 +22,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
     const handleClose = () => setOpen(false);
     const [value, setValue] = useState(dayjs('2022-08-18T00:00:00'));
     const [comentarios, setComentarios] = useState([])
+    const [valuecomentario, setvalue] = useState([])
     const nav = useNavigate()
     const { _id } = useParams()
 
@@ -30,6 +31,47 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
     const handleChange = (newValue) => {
         setValue(newValue);
     };
+
+
+    const handleCrearComentario = (e) => {
+        e.preventDefault()
+        console.log(e)
+        const comentario = {
+            clase: _id,
+            usuario: user.email,
+            comentario: e.target[0].value,
+            estado: false,
+            profesor: profesor.email
+        }
+        console.log("claseee",comentario)
+        try {
+            fetch('http://localhost:4000/comments/create', {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(comentario)
+            }).then(
+                response => response.json().
+                then(response => {
+                    console.log("statuus",response.message)
+                    if (response.message === "Succesfully Created Comment")
+                     {
+                        Swal.fire({
+                            title: 'Comentario enviado,',
+                            text: 'Su comentario queda pendiente de revision',
+                            icon: 'success',
+                            timer: 3000,
+                            timerProgressBar: true,
+
+                        })
+                    }
+                    handleClose()
+                })
+            )
+
+        } catch (err) {
+            console.log('Error', err)
+        }
+    }
 
     const style = {
         position: 'absolute',
@@ -71,7 +113,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                     data => {
                         if (data.status === 201) {
                             Swal.fire({
-                                title: 'Contacto Creada',
+                                title: 'Comentario Enviado',
                                 text: 'Su solicitud fue enviada con éxito',
                                 icon: 'success',
                                 timer: 3000,
@@ -130,6 +172,20 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                     </div>
                     <div className="producto comentarios">
                         <h2>Comentarios</h2>
+                        <form onSubmit={handleCrearComentario} >
+                        <TextField
+                            fullWidth
+                            id="outlined-multiline-static"
+                            style={{ marginBottom: '10px' }}
+                            label="Comentario"
+                            multiline
+                            rows={4}
+                        />
+                            { 
+                                isLogged
+                                ? <Button size='medium' className='btnContacto' type='submit' variant="contained">Comentar</Button>: <></>
+                            }
+                        </form>
                         <ul className="listado">
                             {comentarios.map(comentario => <Comentario key={comentario.id} {...comentario} />)}
                         </ul>

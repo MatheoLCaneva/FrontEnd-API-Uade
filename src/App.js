@@ -12,6 +12,7 @@ import ClasesProfesor from './Components/Clases/ClasesProfesor';
 import Notificaciones from './Components/Notificaciones/Notificaciones';
 import Perfil from './Components/Perfil/Perfil';
 import { Auth } from './Context/AuthContext'
+import Comentario from './Components/Comentario/Comentario';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path='/RecuperarContrasena' element={<RecuperoContraseña />} />
           <Route path='/Clases' element={<ClasesProfesor />} />
           <Route path='/Notificaciones' element={<Notificaciones />} />
+          <Route path='/Comentario' element={<Comentario />} />
           <Route path='/' element={<ItemListContainer mensaje={"Listado de Profesores"} />} />
         </Routes>
       </Router>

@@ -27,7 +27,7 @@ const Perfil = () => {
             try {
                 await fetch('http://localhost:4000/users/', {
                     method: 'put',
-                    headers: { 'Content-Type': 'application/json', "x-access-token":`${localStorage.getItem('token')}` },
+                    headers: { 'Content-Type': 'application/json', "x-access-token": `${localStorage.getItem('token')}` },
                     body: JSON.stringify(nuevosDatos)
                 })
                     .then(response => response.json())
@@ -56,9 +56,9 @@ const Perfil = () => {
     if (user.rol === "Profesor") {
         return (
             <Container maxWidth="xl">
-                <Stack sx={{ mt: 3 }} divider={<Divider orientation="vertical" flexItem />} direction='row' justifyContent='space-around' className="usuarioContainer">
+                <Stack sx={{ mt: 3 }} divider={<Divider orientation="vertical" flexItem />}  direction={{ xs: 'column', md: 'row', lg: 'row', xl: 'row' }}  justifyContent='space-around' className="usuarioContainer">
                     <Stack direction='column' alignItems='center' className="usuarioFoto">
-                        <img src={user.imgUser} alt="imgUsuario" className="imgUsuarioPerfil" width="60%" />
+                        <img src={user.imgUser} alt="imgUsuario" width="60%" />
                         <Typography variant="button">
                             {user.name} {user.apellido}
                         </Typography>
@@ -70,8 +70,8 @@ const Perfil = () => {
                         <Typography variant='h4'>
                             Datos Personales
                         </Typography>
-                        <form onSubmit={handleUpdate}>
-                            <Stack spacing={2} direction='row' sx={{ mt: 3 }}>
+                        <form className="formularioCambio" onSubmit={handleUpdate}>
+                            <Stack className="stackForm" spacing={2} direction={{ sm: 'row' }} sx={{ mt: 3 }}>
                                 <div className="labelNombre">
                                     <TextField disabled label='Nombre' defaultValue={user.name} />
                                 </div>
@@ -80,7 +80,7 @@ const Perfil = () => {
                                 </div>
                             </Stack>
 
-                            <Stack spacing={2} direction='row' sx={{ mt: 3 }}>
+                            <Stack className="stackForm" spacing={2} direction={{ sm: 'row' }} sx={{ mt: 3 }}>
                                 <div className="labelNombre">
                                     <TextField required label='Mail' defaultValue={user.email} />
                                 </div>
@@ -91,7 +91,7 @@ const Perfil = () => {
                                 </div>
                             </Stack>
 
-                            <Stack spacing={2} direction='row' sx={{ mt: 3 }}>
+                            <Stack className="stackForm" spacing={2}direction={{ sm: 'row' }} sx={{ mt: 3 }}>
                                 <div className="labelNombre">
                                     <TextField disabled label='Titulo' defaultValue={user.title} />
                                 </div>
@@ -101,13 +101,12 @@ const Perfil = () => {
                                     }} />
                                 </div>
                             </Stack>
-                            <Button variant="contained" size="medium" sx={{ width: '31%', margin: 'auto', mt: 3 }}>
+                            <button className="btnActualizar" type="submit">
                                 Actualizar
-                            </Button>
+                            </button>
+                            <button type="submit" className="btnActualizar" onClick={handleLogOff}>Cerrar Sesion</button>
                         </form>
-                        <Button variant="contained" size="medium" sx={{ width: '31%', margin: 'auto', mt: 3 }} onClick={handleLogOff}>
-                            Cerrar Sesion
-                        </Button>
+
                     </Stack >
                 </Stack>
             </Container>
@@ -118,7 +117,7 @@ const Perfil = () => {
     if (user.rol === "Estudiante") {
         return (
             <Container maxWidth="xl">
-                <Stack sx={{ mt: 3 }} divider={<Divider orientation="vertical" flexItem />} direction='row' justifyContent='space-around' className="usuarioContainer">
+                <Stack sx={{ mt: 3 }} divider={<Divider orientation="vertical" flexItem />} direction={{ xs: 'column', md: 'row', lg: 'row', xl: 'row' }} justifyContent='space-around' className="usuarioContainer">
                     <Stack direction='column' alignItems='center' className="usuarioFoto">
                         <img src={user.imgUser} alt="imgUsuarioPerfil" width="60%" />
                         <Typography variant="button">
@@ -132,8 +131,8 @@ const Perfil = () => {
                         <Typography variant='h4'>
                             Datos Personales
                         </Typography>
-                        <form onSubmit={handleUpdate}>
-                            <Stack spacing={2} direction='row' sx={{ mt: 3 }}>
+                        <form className="formularioCambio" onSubmit={handleUpdate}>
+                            <Stack className="stackForm" spacing={2} direction={{ sm: 'row' }} sx={{ mt: 3 }}>
                                 <div className="labelNombre">
                                     <TextField disabled label='Nombre' defaultValue={user.name} />
                                 </div>
@@ -142,7 +141,7 @@ const Perfil = () => {
                                 </div>
                             </Stack>
 
-                            <Stack spacing={2} direction='row' sx={{ mt: 3 }}>
+                            <Stack className="stackForm" spacing={2} direction={{ sm: 'row' }} sx={{ mt: 3 }}>
                                 <div className="labelNombre">
                                     <TextField required label='Mail' defaultValue={user.email} />
                                 </div>
@@ -152,13 +151,14 @@ const Perfil = () => {
                                     }} />
                                 </div>
                             </Stack>
-                            <Button variant="contained" type="submit" size="medium" sx={{ width: '31%', margin: 'auto', mt: 3 }}>
+                            <button className="btnActualizar" type="submit">
                                 Actualizar
-                            </Button>
+                            </button>
+                            <button type="submit" className="btnActualizar" onClick={handleLogOff}>Cerrar Sesion</button>
+
+
                         </form>
-                        <Button variant="contained" size="medium" sx={{ width: '31%', margin: 'auto', mt: 3 }} onClick={handleLogOff}>
-                            Cerrar Sesion
-                        </Button>
+
                     </Stack >
                 </Stack>
             </Container>

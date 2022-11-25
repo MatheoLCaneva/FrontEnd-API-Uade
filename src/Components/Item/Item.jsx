@@ -5,12 +5,13 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import { Button, CardActionArea, CardActions } from '@mui/material';
+import './Item.css' 
 
 const Item = ({ nombre, apellido, precio, materia, tipo, frecuencia, duracion, calificacion, profesor, id, _id }) => {
     console.log('profesor', profesor)
     
     return (
-        <Card sx={{ maxWidth: 345, borderRadius: "20px" }}>
+        <Card className='cardClase' sx={{ maxWidth: 345, borderRadius: "20px" }}>
             <CardActionArea>
                 <CardMedia
                     component="img"

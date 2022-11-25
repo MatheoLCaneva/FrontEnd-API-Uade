@@ -18,6 +18,10 @@ import ContextoAuth from '../../Context/AuthContext';
 import { useContext } from 'react';
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
+import './Clases.css'
+import Paper from "@mui/material/Paper";
+import TableContainer from '@mui/material/TableContainer';
+
 
 const ClasesProfesor = () => {
     const [open, setOpen] = useState(false);
@@ -138,8 +142,8 @@ const ClasesProfesor = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(nuevaClase)
         })
-        .then(response => response.json())
-        .then(data => console.log(data))
+            .then(response => response.json())
+            .then(data => console.log(data))
 
 
     }
@@ -236,43 +240,46 @@ const ClasesProfesor = () => {
                     </form>
                 </Box>
             </Modal>
-            <Typography variant="h3" style={{ fontFamily: "'Montserrat', sans-serif", display: 'flex', justifyContent: 'center', margin: "30px 0" }}>Detalle de clases</Typography>
+            <Typography variant={{xs:'h3', sm:'h2'}} style={{ fontFamily: "'Montserrat', sans-serif", display: 'flex', justifyContent: 'center', margin: "30px 0" }}>Detalle de clases</Typography>
             <Button variant="contained" color="primary" onClick={handleOpen}>
                 Nueva Clase
             </Button>
 
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Id</TableCell>
-                        <TableCell align="right">Tipo</TableCell>
-                        <TableCell align="right">Materia</TableCell>
-                        <TableCell align="right">Duracion</TableCell>
-                        <TableCell align="right">Frecuencia</TableCell>
-                        <TableCell align="right">Costo</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {ClasesProfesor.map(row => (
-                        <TableRow key={row._id}>
-                            <Link to={`/clase/${row._id}`} className='link' style={{ cursor: "pointer" }}>
-                                <TableCell component="th" scope="row">
-                                    {row._id}
-                                </TableCell>
-                            </Link>
-                            <TableCell align="right">{row.tipo}</TableCell>
-                            <TableCell align="right">{row.materia}</TableCell>
-                            <TableCell align="right">{row.duracion}</TableCell>
-                            <TableCell align="right">{row.frecuencia}</TableCell>
-                            <TableCell align="right">${row.precio}</TableCell>
-
-                            <TableCell align="right" id={row._id}><CreateIcon id={row._id} onClick={handleOpenUpdate} /></TableCell>
-                            <TableCell id='eliminar' align="right" ><DeleteIcon id={row._id} onClick={deleteClass} /></TableCell>
-
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Id</TableCell>
+                            <TableCell align="right">Tipo</TableCell>
+                            <TableCell align="right">Materia</TableCell>
+                            <TableCell align="right">Duracion</TableCell>
+                            <TableCell align="right">Frecuencia</TableCell>
+                            <TableCell align="right">Costo</TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHead>
+                    <TableBody>
+                        {ClasesProfesor.map(row => (
+                            <TableRow key={row._id}>
+                                <Link to={`/clase/${row._id}`} className='link' style={{ cursor: "pointer" }}>
+                                    <TableCell component="th" scope="row">
+                                        {row._id}
+                                    </TableCell>
+                                </Link>
+                                <TableCell align="right">{row.tipo}</TableCell>
+                                <TableCell align="right">{row.materia}</TableCell>
+                                <TableCell align="right">{row.duracion}</TableCell>
+                                <TableCell align="right">{row.frecuencia}</TableCell>
+                                <TableCell align="right">${row.precio}</TableCell>
+
+                                <TableCell align="right" id={row._id}><CreateIcon id={row._id} onClick={handleOpenUpdate} /></TableCell>
+                                <TableCell id='eliminar' align="right" ><DeleteIcon id={row._id} onClick={deleteClass} /></TableCell>
+
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
 
         </div >
     );

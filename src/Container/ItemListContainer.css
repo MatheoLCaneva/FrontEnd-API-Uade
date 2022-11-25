@@ -20,3 +20,30 @@
     width: 80%;
     margin: auto;
 }
+
+
+@media (max-width: 700px) {
+
+    .filtro-contenedor{
+        flex-direction: column;
+        align-items: center;
+        border-radius: 20px;
+    }
+
+    .filtroTipo, .filtroFrecuencia{
+        width: 40%;
+        margin-bottom: 20px;
+    }
+
+
+    .btnBuscar{
+        width: 40%;
+        margin: auto;
+    }
+
+    .listado {
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+    }
+}

@@ -16,7 +16,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, descripcion, descripcionProfesor }) => {
+const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, descripcion }) => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -89,7 +89,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
 
     if (isLogged) {
         return (
-            <div style={{ display: "flex" }}>
+            <div className='descripcionClase' style={{ display: "flex" }}>
                 <Modal
                     open={open}
                     onClose={handleClose}
@@ -126,7 +126,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                     </div>
                     <div className="acerca-profesor producto">
                         <h2>Acerca de {profesor.name}</h2>
-                        <p>{descripcionProfesor}</p>
+                        <p>{profesor.descripcionProfesor}</p>
                     </div>
                     <div className="producto comentarios">
                         <h2>Comentarios</h2>
@@ -140,7 +140,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                     <div className='card-profesor'>
                         <div className="datos-profesor">
                             <div className="imagen imagenProfesor">
-                                <img style={{ maxWidth: "45%" }} src={profesor.imgUser} alt="imagen profesor" />
+                                <img className='imgProfe' style={{ maxWidth: "60%" }} src={profesor.imgUser} alt="imagen profesor" />
                             </div>
                             <div className="nombre">
                                 <p>{profesor.nombre}</p>
@@ -172,7 +172,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
     }
 
     return (
-        <div style={{ display: "flex" }}>
+        <div className='descripcionClase' style={{ display: "flex" }}>
             <div>
                 <div className="producto">
                     <div className="producto-info">
@@ -181,7 +181,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                 </div>
                 <div className="acerca-profesor producto">
                     <h2>Acerca de {profesor.name}</h2>
-                    <p>{descripcionProfesor}</p>
+                    <p>{profesor.descripcionProfesor}</p>
                 </div>
                 <div className="producto comentarios">
                     <h2>Comentarios</h2>
@@ -195,7 +195,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                 <div className='card-profesor'>
                     <div className="datos-profesor">
                         <div className="imagen imagenProfesor">
-                            <img style={{ maxWidth: "45%" }} src={profesor.imgUser} alt="" />
+                            <img className='imgProfe' style={{ maxWidth: "60%" }} src={profesor.imgUser} alt="" />
                         </div>
                         <div className="nombre">
                             <p>{profesor.nombre}</p>

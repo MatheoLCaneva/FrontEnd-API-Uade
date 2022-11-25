@@ -3,10 +3,10 @@ import { Grid, Paper, Avatar, Typography, TextField, Button, MenuItem, Select, I
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
-
+import './Registro.css'
+import { useState } from 'react';
 
 const RegistroAlumnos = () => {
-    const paperStyle = { padding: 20, width: 500, margin: "0 auto" }
     const headerStyle = { margin: 0 }
     const avatarStyle = { backgroundColor: '#1bbd7e' }
     const TextfieldStyle = { margin: '3px 0' }
@@ -23,8 +23,30 @@ const RegistroAlumnos = () => {
 
     const { register, handleSubmit } = useForm()
     const [estudioName, setEstudioName] = React.useState([]);
+    const [imagenes, setImagenes] = useState('')
+    const [fotoId, setFotoId] = useState(0)
 
     const estudios = ['Primario', 'Secundario', 'Terciario', 'Universitario']
+
+    const hanndleInput = (e) => {
+        let files = e.target.files;
+        let reader = new FileReader();
+        reader.onload = r => {
+            // console.log(r)
+            let newImagen = {
+                id: fotoId,
+                url: r.target.result
+            }
+
+            console.log(newImagen)
+
+            setImagenes(newImagen);
+        };
+        reader.readAsDataURL(files[0]);
+
+        setFotoId(fotoId + 1);
+
+    }
 
     const handleChange = (event) => {
         const {
@@ -36,7 +58,7 @@ const RegistroAlumnos = () => {
         );
     };
 
-    const handleRegisterUser = (event) => {
+    const handleRegisterUser = async (event) => {
         // event.preventDefault()
         var contraseña = document.querySelector('#password').value
         var repContraseña = document.querySelector('#confirmPassword').value
@@ -44,6 +66,23 @@ const RegistroAlumnos = () => {
             event.rol = 'Estudiante'
 
             try {
+                if (imagenes) {
+                    console.log(imagenes)
+                    const data = new FormData();
+                    data.append('file', imagenes.url);
+                    data.append('upload_preset', 'utvjoiww');
+                    data.append('cloud_name', 'matheocaneva')
+                    const res = await fetch(
+                        'https://api.cloudinary.com/v1_1/matheocaneva/image/upload',
+                        {
+                            method: 'POST',
+                            body: data
+                        }
+                    );
+                    const file = await res.json();
+                    console.log(file)
+                    event.imgUser = file.secure_url
+                }
                 fetch('http://localhost:4000/users/registration', {
                     method: 'post',
                     headers: { 'Content-Type': 'application/json' },
@@ -75,7 +114,7 @@ const RegistroAlumnos = () => {
 
     return (
         <Grid>
-            <Paper style={paperStyle}>
+            <Paper className='registro'>
                 <Grid align='center'>
                     <Avatar style={avatarStyle}>
                         <AddCircleOutlineOutlinedIcon />
@@ -127,7 +166,12 @@ const RegistroAlumnos = () => {
 
                     </FormControl>
 
-                    <Button type='submit' variant='contained' color='primary'>Registrarse</Button>
+                    <p>Foto de Perfil</p>
+
+                    {/* <input accept='image/*' onChange={handleInput} id='imagen' type='file' label='Foto de Perfil' style={TextfieldStyle} /> */}
+                    <input accept="image/*" type="file" onChange={hanndleInput} />
+
+                    <Button sx={{ mt: 3 }} type='submit' variant='contained' color='primary'>Registrarse</Button>
                 </form>
             </Paper>
         </Grid>

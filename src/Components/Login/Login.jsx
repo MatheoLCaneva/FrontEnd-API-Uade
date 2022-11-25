@@ -6,11 +6,12 @@ import Checkbox from '@mui/material/Checkbox';
 import ContextoAuth from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
+import './Login.css'
 // import * as Yup from 'yup';
 
 
 const Login = () => {
-    const paperStyle = { padding: 20, width: 300, margin: "0 auto" }
+    const paperStyle = { padding: 20, width: 300, margin: "50px auto" }
     const avatarStyle = { backgroundColor: '#1bbd7e' }
     const btnstyle = { margin: '8px 0' }
     const TextfieldStyle = { margin: '3px 0' }
@@ -53,7 +54,7 @@ const Login = () => {
 
     return (
         <Grid>
-            <Paper style={paperStyle}>
+            <Paper style={paperStyle} className='login'>
                 <Grid align='center'>
                     <Avatar style={avatarStyle}><LockOutlinedIcon /></Avatar>
                     <h2>Iniciar Sesion</h2>

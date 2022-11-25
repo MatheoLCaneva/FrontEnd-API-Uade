@@ -60,7 +60,7 @@ const ItemListContainer = ({ mensaje }) => {
                         </div>
                         <div className="filtroCalificacion filtro">
                         </div>
-                        <Button type="submit" style={{ marginLeft: "5px" }} variant="contained">Buscar</Button>
+                        <Button className="btnBuscar" type="submit" variant="contained">Buscar</Button>
                     </div>
                 </form>
             </div>

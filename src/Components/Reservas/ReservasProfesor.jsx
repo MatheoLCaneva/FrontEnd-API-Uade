@@ -5,6 +5,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ContextoAuth from "../../Context/AuthContext";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import TableContainer from "@mui/material/TableContainer";
+import Paper from "@mui/material/Paper";
 
 const ReservasProfesor = () => {
     const [contactos, setContactos] = useState([])
@@ -86,35 +88,36 @@ const ReservasProfesor = () => {
         <div style={{ width: '80%', margin: 'auto' }}>
             <Typography variant="h3" style={{ fontFamily: "'Montserrat', sans-serif", display: 'flex', justifyContent: 'center', margin: "30px 0" }}>Detalle de Reservas</Typography>
 
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Id</TableCell>
-                        <TableCell align="center">Alumno</TableCell>
-                        <TableCell align="center">Mail Contacto</TableCell>
-                        <TableCell align="center">Telefono</TableCell>
-                        <TableCell align="center">Estado</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {contactos.map(row => (
-                        <TableRow key={row._id}>
-                            <Link to={`/clase/${row._id}`} className='link' style={{ cursor: "pointer" }}>
-                                <TableCell component="th" scope="row">
-                                    {row._id}
-                                </TableCell>
-                            </Link>
-                            <TableCell align="center">{row.horario}</TableCell>
-                            <TableCell align="center">{row.mailContacto}</TableCell>
-                            <TableCell align="center">{row.telefonoContacto}</TableCell>
-                            <TableCell align="center">{row.estado}</TableCell>
-                            <TableCell align="center" id={row._id}><CreateIcon id={row._id} onClick={acceptSchedule} /></TableCell>
-                            <TableCell id='eliminar' align="right" ><DeleteIcon id={row._id} onClick={deniedSchedule} /></TableCell>
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Id</TableCell>
+                            <TableCell align="center">Alumno</TableCell>
+                            <TableCell align="center">Mail Contacto</TableCell>
+                            <TableCell align="center">Telefono</TableCell>
+                            <TableCell align="center">Estado</TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-
+                    </TableHead>
+                    <TableBody>
+                        {contactos.map(row => (
+                            <TableRow key={row._id}>
+                                <Link to={`/clase/${row._id}`} className='link' style={{ cursor: "pointer" }}>
+                                    <TableCell component="th" scope="row">
+                                        {row._id}
+                                    </TableCell>
+                                </Link>
+                                <TableCell align="center">{row.horario}</TableCell>
+                                <TableCell align="center">{row.mailContacto}</TableCell>
+                                <TableCell align="center">{row.telefonoContacto}</TableCell>
+                                <TableCell align="center">{row.estado}</TableCell>
+                                <TableCell align="center" id={row._id}><CreateIcon id={row._id} onClick={acceptSchedule} /></TableCell>
+                                <TableCell id='eliminar' align="right" ><DeleteIcon id={row._id} onClick={deniedSchedule} /></TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </div >
     )
 }

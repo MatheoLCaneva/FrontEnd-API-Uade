@@ -80,3 +80,32 @@
 .imagenProfesor {
     text-align: center;
 }
+
+
+@media (max-width: 800px) {
+    .descripcionClase {
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+
+    .profesor{
+        width: auto;
+    }
+
+    .producto-info {
+        padding: 30px 5px;
+    }
+
+    .producto-info h2 {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 400px) {
+    .producto-info h2 {
+        font-size: 25px;
+    }
+    .producto{
+        margin: 0;
+    }
+}

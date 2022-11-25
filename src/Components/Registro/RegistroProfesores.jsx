@@ -4,10 +4,10 @@ import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOu
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
+import './Registro.css'
 
 
 const RegistroProfesores = () => {
-    const paperStyle = { padding: 20, width: 300, margin: "0 auto" }
     const headerStyle = { margin: 0 }
     const avatarStyle = { backgroundColor: '#1bbd7e' }
     const marginTop = { marginTop: 5 }
@@ -41,7 +41,6 @@ const RegistroProfesores = () => {
     const handleRegisterProfesor = async (event, e) => {
         var contraseña = document.querySelector('#password').value
         var repContraseña = document.querySelector('#confirmPassword').value
-        console.log(imgUser)
         if (contraseña === repContraseña) {
             event.rol = 'Profesor'
 
@@ -94,7 +93,7 @@ const RegistroProfesores = () => {
     }
     return (
         <Grid>
-            <Paper style={paperStyle}>
+            <Paper className='registro'>
                 <Grid align='center'>
                     <Avatar style={avatarStyle}>
                         <AddCircleOutlineOutlinedIcon />
@@ -115,7 +114,7 @@ const RegistroProfesores = () => {
 
                     {/* <input accept='image/*' onChange={handleInput} id='imagen' type='file' label='Foto de Perfil' style={TextfieldStyle} /> */}
                     <input accept="image/*" type="file" onChange={hanndleInput} />
-                    <Button type='submit' variant='contained' style={marginTop} color='primary'>Registrarse</Button>
+                    <Button sx={{mt: 3}} type='submit' variant='contained' style={marginTop} color='primary'>Registrarse</Button>
                 </form>
             </Paper>
         </Grid>

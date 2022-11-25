@@ -17,17 +17,30 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import ContextoAuth from '../../Context/AuthContext';
 import { useContext } from 'react';
 import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
 
 const ClasesProfesor = () => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const [idUpdate, setidUpdate] = useState('')
+
+    const [openUpdate, setOpenUpdate] = useState(false);
+    const handleOpenUpdate = (e) => {
+        let id = e.target.parentElement.id
+        setidUpdate(id)
+        setOpenUpdate(true)
+    };
+    const handleCloseUpdate = () => setOpenUpdate(false);
+
     const [ClasesProfesor, setClasesProfesor] = useState([])
     const { user } = useContext(ContextoAuth)
 
+    // console.log(user)
+
     useEffect(() => {
         const obj = {
-            profesormail: user.user.email
+            profesormail: user.email
         }
         console.log(obj)
         try {
@@ -42,7 +55,7 @@ const ClasesProfesor = () => {
         catch (err) {
             alert(err)
         }
-    }, [user.user.email])
+    }, [user.email])
 
 
     const handleCrearClase = (e) => {
@@ -55,8 +68,8 @@ const ClasesProfesor = () => {
             duracion: e.target.duracion.value + 'hs',
             precio: e.target.precio.value,
             descripcion: e.target.descripcion.value,
-            profesor: user.user,
-            profesormail: user.user.email
+            profesor: user,
+            profesormail: user.email
         }
 
         try {
@@ -84,6 +97,52 @@ const ClasesProfesor = () => {
             console.log('Error', err)
         }
     }
+    const handleUpdateClass = (e) => {
+        e.preventDefault(e)
+        console.log(e.target.length)
+        console.log(e)
+        let nuevaClase;
+
+        if (e.target.length === 16) {
+            nuevaClase = {
+                _id: idUpdate,
+                tipo: e.target[0].value,
+                materia: e.target[2].value,
+                duracion: e.target[6].value,
+                frecuencia: e.target[8].value,
+                precio: e.target[10].value,
+                descripcion: e.target[12].value
+            }
+        } else {
+            nuevaClase = {
+                _id: idUpdate,
+                tipo: e.target[0].value,
+                materia: e.target[2].value,
+                duracion: e.target[5].value,
+                frecuencia: e.target[7].value,
+                precio: e.target[9].value,
+                descripcion: e.target[11].value
+            }
+        }
+
+        Object.keys(nuevaClase).forEach(key => {
+            if (nuevaClase[key] === '') {
+                delete nuevaClase[key];
+            }
+        });
+
+        console.log(nuevaClase)
+
+        fetch('http://localhost:4000/classes/', {
+            method: 'put',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(nuevaClase)
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+
+
+    }
 
     const deleteClass = (e) => {
         const obj = {
@@ -96,7 +155,7 @@ const ClasesProfesor = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(obj)
             }).then(
-                response => response.json().then (data => console.log(data))
+                response => response.json().then(data => console.log(data))
             )
         }
         catch (err) {
@@ -132,7 +191,7 @@ const ClasesProfesor = () => {
                         Crear Clase
                     </Typography>
                     <form onSubmit={handleCrearClase} >
-                        <TextField sx={inputs} id="outlined-basic" name='nombre' label="Nombre" variant="outlined" />
+                        <TextField sx={inputs} id="outlined-basic" name='nombre' label="Tipo" variant="outlined" />
                         <AutocompletarMaterias sx={inputs} />
                         <TextField sx={inputs} id="outlined-basic" name='duracion' label="Duracion" variant="outlined" />
                         <TextField sx={inputs} id="outlined-basic" name='frecuencia' label="Frecuencia" variant="outlined" />
@@ -149,6 +208,34 @@ const ClasesProfesor = () => {
                     </form>
                 </Box>
             </Modal>
+
+            <Modal
+                open={openUpdate}
+                onClose={handleCloseUpdate}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description">
+                <Box sx={styles}>
+                    <Typography style={{ marginBottom: '10px' }} id="modal-modal-title" variant="h5" component="h2">
+                        Actualizar Clase
+                    </Typography>
+                    <form onSubmit={handleUpdateClass} >
+                        <TextField sx={inputs} id="outlined-basic" name='nombre' label='Tipo' variant="outlined" />
+                        <AutocompletarMaterias sx={inputs} />
+                        <TextField sx={inputs} id="outlined-basic" name='duracion' label="Duracion" variant="outlined" />
+                        <TextField sx={inputs} id="outlined-basic" name='frecuencia' label="Frecuencia" variant="outlined" />
+                        <InputLabel htmlFor="outlined-adornment-amount">Precio por hora</InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment-amount"
+                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                            label="Precio"
+                            name='precio'
+                            sx={inputs}
+                        />
+                        <TextField sx={inputs} id="outlined-basic" name='descripcion' label="Descripcion" variant="outlined" multiline={true} fullWidth />
+                        <Button style={{ display: "block" }} type='submit' variant="contained">Actualizar</Button>
+                    </form>
+                </Box>
+            </Modal>
             <Typography variant="h3" style={{ fontFamily: "'Montserrat', sans-serif", display: 'flex', justifyContent: 'center', margin: "30px 0" }}>Detalle de clases</Typography>
             <Button variant="contained" color="primary" onClick={handleOpen}>
                 Nueva Clase
@@ -158,7 +245,7 @@ const ClasesProfesor = () => {
                 <TableHead>
                     <TableRow>
                         <TableCell>Id</TableCell>
-                        <TableCell align="right">Nombre</TableCell>
+                        <TableCell align="right">Tipo</TableCell>
                         <TableCell align="right">Materia</TableCell>
                         <TableCell align="right">Duracion</TableCell>
                         <TableCell align="right">Frecuencia</TableCell>
@@ -168,17 +255,19 @@ const ClasesProfesor = () => {
                 <TableBody>
                     {ClasesProfesor.map(row => (
                         <TableRow key={row._id}>
-                            <TableCell component="th" scope="row">
-                                {row._id}
-                            </TableCell>
+                            <Link to={`/clase/${row._id}`} className='link' style={{ cursor: "pointer" }}>
+                                <TableCell component="th" scope="row">
+                                    {row._id}
+                                </TableCell>
+                            </Link>
                             <TableCell align="right">{row.tipo}</TableCell>
                             <TableCell align="right">{row.materia}</TableCell>
                             <TableCell align="right">{row.duracion}</TableCell>
                             <TableCell align="right">{row.frecuencia}</TableCell>
                             <TableCell align="right">${row.precio}</TableCell>
 
-                            <TableCell align="right"><CreateIcon /></TableCell>
-                            <TableCell id='testeo' align="right" ><DeleteIcon id={row._id} onClick={deleteClass} /></TableCell>
+                            <TableCell align="right" id={row._id}><CreateIcon id={row._id} onClick={handleOpenUpdate} /></TableCell>
+                            <TableCell id='eliminar' align="right" ><DeleteIcon id={row._id} onClick={deleteClass} /></TableCell>
 
                         </TableRow>
                     ))}

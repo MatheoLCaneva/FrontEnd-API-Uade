@@ -12,8 +12,9 @@ import { getComentarios } from '../../DB/db';
 import Comentario from '../Comentario/Comentario';
 import ContextoAuth from '../../Context/AuthContext';
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, descripcion, descripcionProfesor }) => {
     const [open, setOpen] = useState(false);
@@ -22,6 +23,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
     const [value, setValue] = useState(dayjs('2022-08-18T00:00:00'));
     const [comentarios, setComentarios] = useState([])
     const nav = useNavigate()
+    const { _id } = useParams()
 
     const { user, isLogged } = useContext(ContextoAuth)
 
@@ -45,19 +47,44 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
         marginBottom: '20px'
     }
 
-    // useEffect(() => {
-    //     getComentarios().then(response => {
-    //         setComentarios(response.find(res => res.idMateria == id).comentarios)
-    //     })
-    // }, [])
-
-
-    const handleContact = (event) => {
+    const handleContact = async (event) => {
         event.preventDefault()
-        // const estudiante = {
-        //     name: 
-        // }
-        console.log(event.target.nombre.value)
+        const contacto = {
+            profesormail: profesor.email,
+            alumno: user.name + ' ' + user.apellido,
+            telefonoContacto: user.tel,
+            mailContacto: user.email,
+            horario: `${value.$H}:${value.$m}`,
+            claseId: _id
+        }
+
+        try {
+            await fetch('http://localhost:4000/contacts/create', {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(contacto)
+            })
+                .then(
+                    response => response.json()
+                )
+                .then(
+                    data => {
+                        if (data.status === 201) {
+                            Swal.fire({
+                                title: 'Contacto Creada',
+                                text: 'Su solicitud fue enviada con éxito',
+                                icon: 'success',
+                                timer: 3000,
+                                timerProgressBar: true,
+
+                            })
+                        }
+                    }
+                )
+            handleClose()
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     if (isLogged) {
@@ -74,10 +101,10 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                             Contactar Profesor
                         </Typography>
                         <form onSubmit={handleContact}>
-                            <TextField required disabled sx={inputs} value={user.user.name} name='nombre' id="outlined-basic" label="Nombre" variant="outlined" />
+                            <TextField required disabled sx={inputs} value={user.name} name='nombre' id="outlined-basic" label="Nombre" variant="outlined" />
                             <TextField required disabled sx={inputs} value='Caneva' id="outlined-basic" name='apellido' label="Apellido" variant="outlined" />
-                            <TextField required disabled sx={inputs} value={user.user.email} id="outlined-basic" nombre='email' label="Mail" variant="outlined" />
-                            <TextField required disabled sx={inputs} value={user.user.tel} id="outlined-basic" name='tel' label="Teléfono" variant="outlined" />
+                            <TextField required disabled sx={inputs} value={user.email} id="outlined-basic" nombre='email' label="Mail" variant="outlined" />
+                            <TextField required disabled sx={inputs} value={user.tel} id="outlined-basic" name='tel' label="Teléfono" variant="outlined" />
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <TimePicker
                                     label="Horario"
@@ -112,8 +139,8 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                 <div className='profesor'>
                     <div className='card-profesor'>
                         <div className="datos-profesor">
-                            <div className="imagen">
-                                <img style={{ maxWidth: "100%" }} src={img} alt="" />
+                            <div className="imagen imagenProfesor">
+                                <img style={{ maxWidth: "45%" }} src={profesor.imgUser} alt="imagen profesor" />
                             </div>
                             <div className="nombre">
                                 <p>{profesor.nombre}</p>
@@ -167,8 +194,8 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
             <div className='profesor'>
                 <div className='card-profesor'>
                     <div className="datos-profesor">
-                        <div className="imagen">
-                            <img style={{ maxWidth: "100%" }} src={img} alt="" />
+                        <div className="imagen imagenProfesor">
+                            <img style={{ maxWidth: "45%" }} src={profesor.imgUser} alt="" />
                         </div>
                         <div className="nombre">
                             <p>{profesor.nombre}</p>

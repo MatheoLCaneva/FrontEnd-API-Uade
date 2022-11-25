@@ -13,8 +13,11 @@ import Notificaciones from './Components/Notificaciones/Notificaciones';
 import Perfil from './Components/Perfil/Perfil';
 import { Auth } from './Context/AuthContext'
 import Comentario from './Components/Comentario/Comentario';
+import Reservas from './Components/Reservas/Reservas';
+import ReservasProfesor from './Components/Reservas/ReservasProfesor';
 
 function App() {
+  
   return (
     <Auth>
       <Router>
@@ -29,6 +32,8 @@ function App() {
           <Route path='/Clases' element={<ClasesProfesor />} />
           <Route path='/Notificaciones' element={<Notificaciones />} />
           <Route path='/Comentario' element={<Comentario />} />
+          <Route path='/Reservas' element={<Reservas/>} />
+          <Route path='/ReservasProfesor' element={<ReservasProfesor/>} />
           <Route path='/' element={<ItemListContainer mensaje={"Listado de Profesores"} />} />
         </Routes>
       </Router>

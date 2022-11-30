@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 import './Registro.css'
-
+import { useNavigate } from 'react-router-dom';
 
 const RegistroProfesores = () => {
     const headerStyle = { margin: 0 }
@@ -16,6 +16,7 @@ const RegistroProfesores = () => {
     const { register, handleSubmit } = useForm()
     const [imagenes, setImagenes] = useState('')
     const [fotoId, setFotoId] = useState(0)
+    const nav = useNavigate()
 
 
     const hanndleInput = (e) => {
@@ -72,6 +73,14 @@ const RegistroProfesores = () => {
                     (response) => response.json()
                 ).then(data => {
                     sessionStorage.setItem('token', data.createdUser)
+                    Swal.fire({
+                        title: 'Registro Exitoso',
+                        text: 'Su usuario se registro con exito. !Bienvenido!',
+                        icon: 'success',
+                        timer: 3000,
+                        timerProgressBar: true,
+                    })
+                    nav("/")
                 })
 
             } catch (err) {
@@ -110,11 +119,13 @@ const RegistroProfesores = () => {
                     <TextField required fullWidth label='Confirm Password' placeholder="Repetir Contraseña" type='password' style={TextfieldStyle} id='confirmPassword' />
                     <TextField required fullWidth label='Titulo' placeholder="Titulo" style={TextfieldStyle} {...register('title')} />
                     <TextField required fullWidth label='Experiencia' placeholder="Experiencia" style={TextfieldStyle} {...register('experience')} />
+                    <TextField required fullWidth multiline={true} label='Biografia' placeholder="Fecha Nacimiento" style={TextfieldStyle} id='descripcionPorfesor' {...register('descripcionProfesor')} />
+
                     <p>Foto de Perfil</p>
 
                     {/* <input accept='image/*' onChange={handleInput} id='imagen' type='file' label='Foto de Perfil' style={TextfieldStyle} /> */}
                     <input accept="image/*" type="file" onChange={hanndleInput} />
-                    <Button sx={{mt: 3}} type='submit' variant='contained' style={marginTop} color='primary'>Registrarse</Button>
+                    <Button sx={{ mt: 3 }} type='submit' variant='contained' style={marginTop} color='primary'>Registrarse</Button>
                 </form>
             </Paper>
         </Grid>

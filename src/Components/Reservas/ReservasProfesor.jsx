@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { TableCell, TableRow, Button, Table, TableHead, TableBody, Typography } from "@mui/material";
 import CreateIcon from '@mui/icons-material/Create';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DoneIcon from '@mui/icons-material/Done'
 import ContextoAuth from "../../Context/AuthContext";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -111,7 +112,7 @@ const ReservasProfesor = () => {
                                 <TableCell align="center">{row.mailContacto}</TableCell>
                                 <TableCell align="center">{row.telefonoContacto}</TableCell>
                                 <TableCell align="center">{row.estado}</TableCell>
-                                <TableCell align="center" id={row._id}><CreateIcon id={row._id} onClick={acceptSchedule} /></TableCell>
+                                <TableCell align="center" id={row._id}><DoneIcon id={row._id} onClick={acceptSchedule} /></TableCell>
                                 <TableCell id='eliminar' align="right" ><DeleteIcon id={row._id} onClick={deniedSchedule} /></TableCell>
                             </TableRow>
                         ))}

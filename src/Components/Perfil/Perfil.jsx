@@ -36,12 +36,18 @@ const Perfil = () => {
                             Swal.fire({
                                 title: 'Datos Actualizados',
                                 text: 'Sus datos fueron actualizados con exito',
-                                icon: 'success',
-                                timer: 3000,
-                                timerProgressBar: true,
+                                icon: 'success'
                             })
+                                .then(response => {
+                                    if (response.isConfirmed === true) {
+                                        window.location.reload()
+                                    }
+                                })
+
                             loginUser(data.data)
                             localStorage.setItem('user', JSON.stringify(data.data))
+
+
                         }
                     })
             }
@@ -56,7 +62,7 @@ const Perfil = () => {
     if (user.rol === "Profesor") {
         return (
             <Container maxWidth="xl">
-                <Stack sx={{ mt: 3 }} divider={<Divider orientation="vertical" flexItem />}  direction={{ xs: 'column', md: 'row', lg: 'row', xl: 'row' }}  justifyContent='space-around' className="usuarioContainer">
+                <Stack sx={{ mt: 3 }} divider={<Divider orientation="vertical" flexItem />} direction={{ xs: 'column', md: 'row', lg: 'row', xl: 'row' }} justifyContent='space-around' className="usuarioContainer">
                     <Stack direction='column' alignItems='center' className="usuarioFoto">
                         <img src={user.imgUser} alt="imgUsuario" width="60%" />
                         <Typography variant="button">
@@ -91,7 +97,7 @@ const Perfil = () => {
                                 </div>
                             </Stack>
 
-                            <Stack className="stackForm" spacing={2}direction={{ sm: 'row' }} sx={{ mt: 3 }}>
+                            <Stack className="stackForm" spacing={2} direction={{ sm: 'row' }} sx={{ mt: 3 }}>
                                 <div className="labelNombre">
                                     <TextField disabled label='Titulo' defaultValue={user.title} />
                                 </div>

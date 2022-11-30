@@ -17,7 +17,7 @@ import ContextoAuth from '../../Context/AuthContext';
 import { useEffect, useState } from 'react';
 import CircularIndeterminate from "../Loader/Loader";
 
-const opcionesProfesor = ['Perfil', 'Notificaciones', 'Clases', 'ReservasProfesor'];
+const opcionesProfesor = ['Perfil', 'Comentarios', 'Clases', 'ReservasProfesor'];
 const opcionesEstudiante = ['Perfil', 'Reservas']
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);

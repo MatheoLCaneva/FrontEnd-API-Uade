@@ -30,7 +30,7 @@ const ClasesProfesor = () => {
     const [idUpdate, setidUpdate] = useState('')
 
     const [openUpdate, setOpenUpdate] = useState(false);
-    
+
 
     const handleOpenUpdate = (e) => {
         let id = e.target.parentElement.id
@@ -90,10 +90,12 @@ const ClasesProfesor = () => {
                             title: 'Clase Creada',
                             text: 'Su clase se creo con éxito',
                             icon: 'success',
-                            timer: 3000,
-                            timerProgressBar: true,
-
                         })
+                            .then(response => {
+                                if (response.isConfirmed === true) {
+                                    window.location.reload()
+                                }
+                            })
                     }
                     handleClose()
                 })
@@ -161,7 +163,20 @@ const ClasesProfesor = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(obj)
             }).then(
-                response => response.json().then(data => console.log(data))
+                response => response.json().then(data => {
+                    if (data.status === 200) {
+                        Swal.fire({
+                            title: 'Clase eliminada',
+                            text: 'Su clase se eliminó con éxito',
+                            icon: 'success',
+                        })
+                            .then(response => {
+                                if (response.isConfirmed === true) {
+                                    window.location.reload()
+                                }
+                            })
+                    }
+                })
             )
         }
         catch (err) {
@@ -210,7 +225,7 @@ const ClasesProfesor = () => {
                             sx={inputs}
                         />
                         <TextField sx={inputs} id="outlined-basic" name='descripcion' label="Descripcion" variant="outlined" multiline={true} fullWidth />
-                        <Button style={{ display: "block" }} type='submit' variant="contained">Contratar</Button>
+                        <Button style={{ display: "block" }} type='submit' variant="contained">Crear</Button>
                     </form>
                 </Box>
             </Modal>
@@ -242,7 +257,7 @@ const ClasesProfesor = () => {
                     </form>
                 </Box>
             </Modal>
-            <Typography variant={{ xs: 'h3', sm: 'h2' }} style={{ fontFamily: "'Montserrat', sans-serif", display: 'flex', justifyContent: 'center', margin: "30px 0" }}>Detalle de clases</Typography>
+            <Typography variant='h2' style={{ fontFamily: "'Montserrat', sans-serif", display: 'flex', justifyContent: 'center', margin: "30px 0" }}>Detalle de clases</Typography>
             <Button variant="contained" color="primary" onClick={handleOpen}>
                 Nueva Clase
             </Button>
@@ -251,9 +266,8 @@ const ClasesProfesor = () => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Id</TableCell>
+                            <TableCell>Materia</TableCell>
                             <TableCell align="right">Tipo</TableCell>
-                            <TableCell align="right">Materia</TableCell>
                             <TableCell align="right">Duracion</TableCell>
                             <TableCell align="right">Frecuencia</TableCell>
                             <TableCell align="right">Costo</TableCell>
@@ -264,11 +278,10 @@ const ClasesProfesor = () => {
                             <TableRow key={row._id}>
                                 <Link to={`/clase/${row._id}`} className='link' style={{ cursor: "pointer" }}>
                                     <TableCell component="th" scope="row">
-                                        {row._id}
+                                        {row.materia}
                                     </TableCell>
                                 </Link>
                                 <TableCell align="right">{row.tipo}</TableCell>
-                                <TableCell align="right">{row.materia}</TableCell>
                                 <TableCell align="right">{row.duracion}</TableCell>
                                 <TableCell align="right">{row.frecuencia}</TableCell>
                                 <TableCell align="right">${row.precio}</TableCell>

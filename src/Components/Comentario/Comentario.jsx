@@ -10,6 +10,8 @@ import DoneIcon from '@mui/icons-material/Done';
 import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { Stack } from '@mui/system';
+import ContextoAuth from '../../Context/AuthContext';
+import { useContext } from 'react';
 
 const Comentario = () => {
   const [tableData, setTableData] = useState([])
@@ -21,7 +23,30 @@ const Comentario = () => {
   const [openRechazar, setOpenRechazar] = useState(false);
   const handleOpenRechazar = () => setOpenRechazar(true);
   const handleCloseRechazar = () => setOpenRechazar(false);
+  const { user } = useContext(ContextoAuth)
+  const [textoRechazo, setTextoRechazo] = useState('')
 
+  useEffect(() => {
+    const obj = {
+      profesor: user.email
+    }
+
+    try {
+      fetch('http://localhost:4000/comments/commentsByMail/', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(obj)
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('data', data)
+          setTableData(data.data.docs)
+        })
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }, [user.email])
 
   function accept(mail, clase) {
     setEmailUsuario(mail)
@@ -29,39 +54,85 @@ const Comentario = () => {
     console.log("funcion accept", idUpdate, emailUsuario)
     setOpen(true)
   }
+  function denied(mail, comentario) {
+    setEmailUsuario(mail)
+    setidUpdate(comentario)
+    console.log("funcion accept", idUpdate, emailUsuario)
+    handleOpenRechazar()
+  }
 
+  const handleDeleteComment = (e) => {
+    e.preventDefault()
+    const obj = {
+      comentarioId: idUpdate,
+      usuario: emailUsuario
+    }
+    console.log(obj)
+
+    try {
+      fetch('http://localhost:4000/comments/', {
+        method: 'delete',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(obj)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 200) {
+            handleCloseRechazar()
+            Swal.fire({
+              title: 'Comentario Eliminado',
+              text: 'Esto no se visualizara en el foro',
+              icon: 'success',
+            })
+              .then(
+                response => {
+                  if (response.isConfirmed) {
+                    window.location.reload()
+                  }
+                }
+              )
+          }
+        })
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
 
   const handleUpdateComment = (e) => {
     e.preventDefault(e)
-    let commentToUpdate;
-    const obj = 
+    const obj =
     {
       usuario: emailUsuario,
       clase: idUpdate,
       estado: true
 
     }
-
     console.log(obj)
 
     fetch('http://localhost:4000/comments/', {
-        method: 'put',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(obj)
+      method: 'put',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(obj)
     })
-    .then(response => response.json())
-    .then(data =>{
-      console.log("data",data)
-      if (data.status === 200) {
-      Swal.fire({
-        title: 'Comentario aceptado',
-        text: 'Ahora se visualiza el comentario en el foro',
-        icon: 'success',
-        timer: 3000,
-        timerProgressBar: true,
-
+      .then(response => response.json())
+      .then(data => {
+        console.log("data", data)
+        if (data.status === 200) {
+          Swal.fire({
+            title: 'Comentario aceptado',
+            text: 'Ahora se visualiza el comentario en el foro',
+            icon: 'success',
+          })
+            .then(
+              response => {
+                if (response.isConfirmed) {
+                  window.location.reload()
+                }
+              }
+            )
+        }
       })
-    }}  )
     handleClose()
   }
 
@@ -77,13 +148,6 @@ const Comentario = () => {
     p: 4,
   };
 
-
-  useEffect(() => {
-    fetch('http://localhost:4000/comments')
-      .then(response => response.json())
-      .then(json => setTableData(json.data.docs))
-
-  }, []);
 
   return (
     <><div style={{ width: '80%', margin: 'auto' }}>
@@ -119,13 +183,14 @@ const Comentario = () => {
           <h4>Por favor describa el motivo de rechazo del comentario</h4>
           <TextField
             fullWidth
-            id="outlined-multiline-static"
+            id="textoRechazo"
             style={{ marginBottom: '10px' }}
             label="Descripcion Rechazo"
             multiline
             rows={4}
+            onChange={(e) => setTextoRechazo(e.target.value)}
           />
-          <form onSubmit={handleUpdateComment}>
+          <form onSubmit={handleDeleteComment}>
             <Stack spacing={2} direction="row">
               <Button style={{ display: "block" }} type='submit' variant="contained">Enviar</Button>
               <Button style={{ display: "block" }} variant="contained" onClick={handleCloseRechazar}>Cancelar</Button>
@@ -163,8 +228,9 @@ const Comentario = () => {
 
                       }}><DoneIcon className={row.usuario} id={row._id} /></IconButton>
                       <IconButton className={row.usuario} id={row._id} onClick={(e) => {
-                        accept(row.usuario, row._id)
-                      }} ><ClearIcon className={row.usuario} id={row._id} onClick={handleOpenRechazar} /></IconButton>
+                        denied(row.usuario, row._id)
+
+                      }} ><ClearIcon className={row.usuario} id={row._id} /></IconButton>
                     </TableCell>
                     {/* <TableCell id='eliminar' align="right" ><DeleteIcon id={row._id} onClick={deleteClass} /></TableCell> */}
 

@@ -11,11 +11,11 @@ const Item = ({ nombre, apellido, precio, materia, tipo, frecuencia, duracion, c
     console.log('profesor', profesor)
     
     return (
-        <Card className='cardClase' sx={{ maxWidth: 345, borderRadius: "20px" }}>
+        <Card className='cardClase' sx={{ mt: 3 ,width: 500, borderRadius: "20px" }}>
             <CardActionArea>
                 <CardMedia
                     component="img"
-                    height="140"
+                    height="300"
                     image={profesor.imgUser}
                     alt="green iguana"
                 />
@@ -23,14 +23,14 @@ const Item = ({ nombre, apellido, precio, materia, tipo, frecuencia, duracion, c
                     <Typography gutterBottom variant="h5" component="div">
                         {nombre} {apellido}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="h5" color="text.secondary">
                         Precio: {precio}/h <br />
                         Calificacion: {calificacion}/10
                     </Typography>
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                <Link style={{textDecoration: "none"}} to={`/clase/${_id}`}><Button size="small" color="primary" variant='text'>
+                <Link style={{ fontSize: "20px" ,color: "black" ,textDecoration: "none"}} to={`/clase/${_id}`}><Button size="small" color="primary" variant='text'>
                     Ver mas de esta clase
                 </Button></Link>
             </CardActions>

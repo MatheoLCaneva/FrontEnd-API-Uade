@@ -30,8 +30,7 @@ function App() {
           <Route path='/Login' element={<Login />} />
           <Route path='/RecuperarContrasena' element={<RecuperoContraseña />} />
           <Route path='/Clases' element={<ClasesProfesor />} />
-          <Route path='/Notificaciones' element={<Notificaciones />} />
-          <Route path='/Comentario' element={<Comentario />} />
+          <Route path='/Comentarios' element={<Comentario />} />
           <Route path='/Reservas' element={<Reservas/>} />
           <Route path='/ReservasProfesor' element={<ReservasProfesor/>} />
           <Route path='/' element={<ItemListContainer mensaje={"Listado de Profesores"} />} />

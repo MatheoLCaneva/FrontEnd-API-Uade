@@ -15,6 +15,7 @@ import { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import ComentarioItem from '../ComentarioItem/ComentarioItem';
 
 const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, descripcion }) => {
     const [open, setOpen] = useState(false);
@@ -33,6 +34,28 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
     };
 
 
+    useEffect(() => {
+        try {
+            fetch('http://localhost:4000/comments/', {
+                method: 'get'
+            })
+                .then(
+                    response => response.json()
+                )
+                .then(
+                    data => {
+                        setComentarios(data.data.docs.filter(clase => clase.clase === _id && clase.estado))
+                        // console.log(comentarios)
+                    }
+                )
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }, [])
+
+    console.log(comentarios)
+
     const handleCrearComentario = (e) => {
         e.preventDefault()
         console.log(e)
@@ -43,30 +66,32 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
             estado: false,
             profesor: profesor.email
         }
-        console.log("claseee",comentario)
+        console.log("claseee", comentario)
         try {
             fetch('http://localhost:4000/comments/create', {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(comentario)
             }).then(
-                response => response.json().
-                then(response => {
-                    console.log("statuus",response.message)
-                    if (response.message === "Succesfully Created Comment")
-                     {
+                response => response.json())
+                .then(response => {
+                    if (response.status === 201) {
                         Swal.fire({
                             title: 'Comentario enviado,',
                             text: 'Su comentario queda pendiente de revision',
                             icon: 'success',
-                            timer: 3000,
-                            timerProgressBar: true,
-
                         })
+                            .then(
+                                response => {
+                                    if (response.isConfirmed) {
+                                        window.location.reload()
+                                    }
+                                }
+                            )
                     }
                     handleClose()
                 })
-            )
+
 
         } catch (err) {
             console.log('Error', err)
@@ -173,21 +198,21 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                     <div className="producto comentarios">
                         <h2>Comentarios</h2>
                         <form onSubmit={handleCrearComentario} >
-                        <TextField
-                            fullWidth
-                            id="outlined-multiline-static"
-                            style={{ marginBottom: '10px' }}
-                            label="Comentario"
-                            multiline
-                            rows={4}
-                        />
-                            { 
+                            <TextField
+                                fullWidth
+                                id="outlined-multiline-static"
+                                style={{ marginBottom: '10px' }}
+                                label="Comentario"
+                                multiline
+                                rows={4}
+                            />
+                            {
                                 isLogged
-                                ? <Button size='medium' className='btnContacto' type='submit' variant="contained">Comentar</Button>: <></>
+                                    ? <Button size='medium' className='btnContacto' type='submit' variant="contained">Comentar</Button> : <></>
                             }
                         </form>
                         <ul className="listado">
-                            {comentarios.map(comentario => <Comentario key={comentario.id} {...comentario} />)}
+                            {comentarios.map(comentario => <ComentarioItem key={comentario._id} {...comentario} />)}
                         </ul>
                     </div>
                 </div>
@@ -242,7 +267,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                 <div className="producto comentarios">
                     <h2>Comentarios</h2>
                     <ul className="listado">
-                        {comentarios.map(comentario => <Comentario key={comentario.id} {...comentario} />)}
+                        {comentarios.map(comentario => <ComentarioItem key={comentario._id} {...comentario} />)}
                     </ul>
                 </div>
             </div>

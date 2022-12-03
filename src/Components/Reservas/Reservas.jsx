@@ -15,7 +15,7 @@ const Reservas = () => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    // console.log(user)
+    // 
 
     useEffect(() => {
         const obj = {
@@ -35,7 +35,7 @@ const Reservas = () => {
         }
     }, [user.email])
 
-    console.log(contactos)
+    
 
     const styles = {
         position: 'absolute',
@@ -55,8 +55,8 @@ const Reservas = () => {
 
     const handleSendComment = (e) => {
         e.preventDefault(e)
-        console.log("pasoo",e.target[0].value)
-        console.log(e)
+        
+        
         let newcomment;
     
         if (e.target.length === 16) {
@@ -90,7 +90,7 @@ const Reservas = () => {
             }
         });
     
-        console.log(newcomment)
+        
     
         // fetch('http://localhost:4000/classes/', {
         //     method: 'put',

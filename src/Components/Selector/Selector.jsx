@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-const Selector = ({ variable, variable1, variable2, variable3, ID }) => {
+const Selector = ({ idSelector, variable, variable1, variable2, variable3 }) => {
     const [tipo, setTipo] = React.useState('');
 
 
@@ -19,7 +19,7 @@ const Selector = ({ variable, variable1, variable2, variable3, ID }) => {
                 <InputLabel id="demo-simple-select-label">{variable}</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
-                    id={ID}
+                    id={idSelector}
                     value={tipo}
                     label={variable}
                     onChange={handleChange}

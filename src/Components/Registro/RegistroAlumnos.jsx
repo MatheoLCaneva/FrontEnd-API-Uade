@@ -32,13 +32,13 @@ const RegistroAlumnos = () => {
         let files = e.target.files;
         let reader = new FileReader();
         reader.onload = r => {
-            // console.log(r)
+            // 
             let newImagen = {
                 id: fotoId,
                 url: r.target.result
             }
 
-            console.log(newImagen)
+            
 
             setImagenes(newImagen);
         };
@@ -67,7 +67,7 @@ const RegistroAlumnos = () => {
 
             try {
                 if (imagenes) {
-                    console.log(imagenes)
+                    
                     const data = new FormData();
                     data.append('file', imagenes.url);
                     data.append('upload_preset', 'utvjoiww');
@@ -80,7 +80,7 @@ const RegistroAlumnos = () => {
                         }
                     );
                     const file = await res.json();
-                    console.log(file)
+                    
                     event.imgUser = file.secure_url
                 }
                 fetch('http://localhost:4000/users/registration', {

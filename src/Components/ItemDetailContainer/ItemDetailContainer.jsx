@@ -12,7 +12,7 @@ const ItemDetailContainer = () => {
     const { _id } = useParams()
     const [cargando, setCargando] = useState(true)
 
-    console.log(_id)
+    
 
     useEffect(() => {
         setCargando(true)
@@ -25,7 +25,7 @@ const ItemDetailContainer = () => {
         ).then(
             function (data) {
                 setClases(data.data.docs[0])
-                console.log(clases)
+                
                 setCargando(false)
             }
         )

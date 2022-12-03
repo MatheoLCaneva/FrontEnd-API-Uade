@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { TableCell, TableRow, Button, Table, TableHead, TableBody, Typography } from "@mui/material";
-import CreateIcon from '@mui/icons-material/Create';
+import { TableCell, TableRow, Table, TableHead, TableBody, Typography } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done'
 import ContextoAuth from "../../Context/AuthContext";
@@ -17,7 +16,7 @@ const ReservasProfesor = () => {
         const obj = {
             profesormail: user.email
         }
-        console.log(obj)
+        
         try {
             fetch('http://localhost:4000/contacts/contactsByMail', {
                 method: 'post',
@@ -38,7 +37,7 @@ const ReservasProfesor = () => {
             _id: e.target.parentElement.id,
             estado: 'Aceptada'
         }
-        console.log(obj)
+        
         try {
             fetch('http://localhost:4000/contacts/', {
                 method: 'put',
@@ -68,23 +67,7 @@ const ReservasProfesor = () => {
 
     }
 
-    console.log(contactos)
 
-    const styles = {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-    };
-
-    const inputs = {
-        marginBottom: '20px'
-    }
     return (
         <div style={{ width: '80%', margin: 'auto' }}>
             <Typography variant="h3" style={{ fontFamily: "'Montserrat', sans-serif", display: 'flex', justifyContent: 'center', margin: "30px 0" }}>Detalle de Reservas</Typography>

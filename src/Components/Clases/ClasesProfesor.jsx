@@ -42,13 +42,11 @@ const ClasesProfesor = () => {
     const [ClasesProfesor, setClasesProfesor] = useState([])
     const { user } = useContext(ContextoAuth)
 
-    // console.log(user)
 
     useEffect(() => {
         const obj = {
             profesormail: user.email
         }
-        console.log(obj)
         try {
             fetch('http://localhost:4000/classes/classById', {
                 method: 'post',
@@ -107,8 +105,8 @@ const ClasesProfesor = () => {
     }
     const handleUpdateClass = (e) => {
         e.preventDefault(e)
-        console.log(e.target.length)
-        console.log(e)
+        
+        
         let nuevaClase;
 
         if (e.target.length === 16) {
@@ -139,7 +137,7 @@ const ClasesProfesor = () => {
             }
         });
 
-        console.log(nuevaClase)
+        
 
         fetch('http://localhost:4000/classes/', {
             method: 'put',

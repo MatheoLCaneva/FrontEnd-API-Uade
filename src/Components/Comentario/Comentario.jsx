@@ -39,7 +39,7 @@ const Comentario = () => {
       })
         .then(response => response.json())
         .then(data => {
-          console.log('data', data)
+          
           setTableData(data.data.docs)
         })
     }
@@ -51,13 +51,13 @@ const Comentario = () => {
   function accept(mail, clase) {
     setEmailUsuario(mail)
     setidUpdate(clase)
-    console.log("funcion accept", idUpdate, emailUsuario)
+    
     setOpen(true)
   }
   function denied(mail, comentario) {
     setEmailUsuario(mail)
     setidUpdate(comentario)
-    console.log("funcion accept", idUpdate, emailUsuario)
+    
     handleOpenRechazar()
   }
 
@@ -67,7 +67,7 @@ const Comentario = () => {
       comentarioId: idUpdate,
       usuario: emailUsuario
     }
-    console.log(obj)
+    
 
     try {
       fetch('http://localhost:4000/comments/', {
@@ -108,7 +108,7 @@ const Comentario = () => {
       estado: true
 
     }
-    console.log(obj)
+    
 
     fetch('http://localhost:4000/comments/', {
       method: 'put',
@@ -117,7 +117,7 @@ const Comentario = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log("data", data)
+        
         if (data.status === 200) {
           Swal.fire({
             title: 'Comentario aceptado',

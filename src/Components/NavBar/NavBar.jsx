@@ -41,7 +41,7 @@ const NavBar = () => {
     setAnchorElUser(null);
   };
 
-  console.log('usuario', user)
+  
 
   if (isLogged) {
 

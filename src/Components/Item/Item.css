@@ -1,5 +1,21 @@
+.cardClasegen {
+    width: 30%;
+}
 
+.MuiCard-root {
+    width: 35%;
+}
 
+@media (max-width: 900px) {
+    .cardClase {
+        margin: 20px 0px;
+    }
+
+    .MuiCard-root {
+        width: 50%;
+    }
+    
+}
 
 @media (max-width: 700px) {
     .cardClase {

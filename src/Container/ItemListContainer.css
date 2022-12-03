@@ -1,42 +1,90 @@
-.filtro-contenedor {
-    display: flex;
-    margin: auto;
-}
-
-.filtros {
-    width: 87%;
-    margin: auto;
-}
-
-.filtro {
-    margin: 0 10px
-}
-
 * {
     font-family: 'Montserrat', sans-serif;
 }
 
+.filtro-contenedor {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 35px 0;
+}
+
+.listado {
+    width: 100%;
+}
+
+.listadoFiltro {
+    display: flex;
+    justify-content: center;
+}
+
+.filtros {
+    width: 20%;
+    border-right: solid 1px rgba(128, 128, 128, 0.412);
+    padding-right: 30px;
+}
+
+.filtros-form {
+    position: sticky;
+    top: 20px;
+}
+
+.filtro {
+    margin: 10px 10px
+}
+
+.filtroResponsive {
+    display: none;
+}
+
+
+
 .sectionClasses {
-    width: 80%;
+    width: 95%;
     margin: auto;
 }
 
 
+@media (max-width: 900px) {
+
+    .listadoFiltro {
+        flex-direction: column;
+    }
+
+    .filtros {
+        border: none;
+    }
+
+    .filtroResponsive {
+        display: initial;
+    }
+
+    .filtro-contenedor {
+        display: none;
+    }
+
+    .listado {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
 @media (max-width: 700px) {
 
-    .filtro-contenedor{
+    .filtro-contenedor {
         flex-direction: column;
         align-items: center;
         border-radius: 20px;
     }
 
-    .filtroTipo, .filtroFrecuencia{
+    .filtroTipo,
+    .filtroFrecuencia {
         width: 40%;
         margin-bottom: 20px;
     }
 
 
-    .btnBuscar{
+    .btnBuscar {
         width: 40%;
         margin: auto;
     }
@@ -46,4 +94,6 @@
         align-items: center;
         padding: 0;
     }
+
+
 }

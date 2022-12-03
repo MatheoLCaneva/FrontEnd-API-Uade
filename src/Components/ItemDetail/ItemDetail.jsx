@@ -45,7 +45,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                 .then(
                     data => {
                         setComentarios(data.data.docs.filter(clase => clase.clase === _id && clase.estado))
-                        // console.log(comentarios)
+                        // 
                     }
                 )
         }
@@ -54,11 +54,11 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
         }
     }, [])
 
-    console.log(comentarios)
+    
 
     const handleCrearComentario = (e) => {
         e.preventDefault()
-        console.log(e)
+        
         const comentario = {
             clase: _id,
             usuario: user.email,
@@ -66,7 +66,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
             estado: false,
             profesor: profesor.email
         }
-        console.log("claseee", comentario)
+        
         try {
             fetch('http://localhost:4000/comments/create', {
                 method: 'post',

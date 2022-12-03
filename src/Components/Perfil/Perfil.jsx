@@ -8,7 +8,7 @@ import Swal from "sweetalert2"
 const Perfil = () => {
 
     const { user, logOffUser, loginUser } = useContext(ContextoAuth)
-    console.log(user)
+    
     const nav = useNavigate()
     const handleLogOff = () => {
         logOffUser()

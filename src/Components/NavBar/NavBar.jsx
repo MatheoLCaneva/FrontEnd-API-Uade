@@ -14,16 +14,13 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
 import './NavBar.css'
 import ContextoAuth from '../../Context/AuthContext';
-import { useEffect, useState } from 'react';
-import CircularIndeterminate from "../Loader/Loader";
 
 const opcionesProfesor = ['Perfil', 'Comentarios', 'Clases', 'ReservasProfesor'];
 const opcionesEstudiante = ['Perfil', 'Reservas']
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { user, isLogged, loginUser } = React.useContext(ContextoAuth)
-  // const [cargando, setCargando] = useState(true)
+  const { user, isLogged } = React.useContext(ContextoAuth)
 
 
   const handleOpenNavMenu = (event) => {

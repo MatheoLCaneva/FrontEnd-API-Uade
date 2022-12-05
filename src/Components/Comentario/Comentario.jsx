@@ -1,9 +1,6 @@
 import './Comentario.css'
-import WidgetUsuario from './WidgetUsuario';
-import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-import { getComentarios } from '../../DB/db';
-import { Button, Card, CardContent, InputLabel, Modal, OutlinedInput, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@mui/material';
+import { Button, Card, CardContent, Modal, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography, TableContainer, Paper } from '@mui/material';
 import IconButton from "@mui/material/IconButton";
 import ClearIcon from '@mui/icons-material/Clear';
 import DoneIcon from '@mui/icons-material/Done';
@@ -39,7 +36,7 @@ const Comentario = () => {
       })
         .then(response => response.json())
         .then(data => {
-          
+
           setTableData(data.data.docs)
         })
     }
@@ -51,13 +48,13 @@ const Comentario = () => {
   function accept(mail, clase) {
     setEmailUsuario(mail)
     setidUpdate(clase)
-    
+
     setOpen(true)
   }
   function denied(mail, comentario) {
     setEmailUsuario(mail)
     setidUpdate(comentario)
-    
+
     handleOpenRechazar()
   }
 
@@ -67,7 +64,7 @@ const Comentario = () => {
       comentarioId: idUpdate,
       usuario: emailUsuario
     }
-    
+
 
     try {
       fetch('http://localhost:4000/comments/', {
@@ -108,7 +105,7 @@ const Comentario = () => {
       estado: true
 
     }
-    
+
 
     fetch('http://localhost:4000/comments/', {
       method: 'put',
@@ -117,7 +114,7 @@ const Comentario = () => {
     })
       .then(response => response.json())
       .then(data => {
-        
+
         if (data.status === 200) {
           Swal.fire({
             title: 'Comentario aceptado',
@@ -202,42 +199,44 @@ const Comentario = () => {
 
       <Typography variant="h3" style={{ fontFamily: "'Montserrat', sans-serif", display: 'flex', justifyContent: 'center', margin: "30px 0" }}>Comentarios a Revisar</Typography>
       <div style={{ display: 'flex', justifyContent: 'center', margin: "30px 0" }} >
-        <Card >
+        <Card sx={{ width: { md: '60%' } }}>
           <CardContent  >
-            <Table>
-              <TableHead>
-                <TableRow>
-                  {/* <TableCell>Id</TableCell> */}
-                  <TableCell align="center">Comentario</TableCell>
-                  <TableCell align="center">Alumno</TableCell>
-                  <TableCell align="center">Clase</TableCell>
-                  <TableCell align="center">Opciones</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {tableData.map(row => (
-                  <TableRow key={row._id}>
-
-                    <TableCell align="center">{row.comentario}</TableCell>
-                    <TableCell align="center">{row.usuario}</TableCell>
-                    <TableCell align="center">{row.clase}</TableCell>
-
-                    <TableCell align="center" id={row._id}>
-                      <IconButton className={row.usuario} id={row._id} onClick={(e) => {
-                        accept(row.usuario, row._id)
-
-                      }}><DoneIcon className={row.usuario} id={row._id} /></IconButton>
-                      <IconButton className={row.usuario} id={row._id} onClick={(e) => {
-                        denied(row.usuario, row._id)
-
-                      }} ><ClearIcon className={row.usuario} id={row._id} /></IconButton>
-                    </TableCell>
-                    {/* <TableCell id='eliminar' align="right" ><DeleteIcon id={row._id} onClick={deleteClass} /></TableCell> */}
-
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    {/* <TableCell>Id</TableCell> */}
+                    <TableCell align="center">Comentario</TableCell>
+                    <TableCell align="center">Alumno</TableCell>
+                    <TableCell align="center">Clase</TableCell>
+                    <TableCell align="center">Opciones</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHead>
+                <TableBody>
+                  {tableData.map(row => (
+                    <TableRow key={row._id}>
+
+                      <TableCell align="center">{row.comentario}</TableCell>
+                      <TableCell align="center">{row.usuario}</TableCell>
+                      <TableCell align="center">{row.clase}</TableCell>
+
+                      <TableCell align="center" id={row._id}>
+                        <IconButton className={row.usuario} id={row._id} onClick={(e) => {
+                          accept(row.usuario, row._id)
+
+                        }}><DoneIcon className={row.usuario} id={row._id} /></IconButton>
+                        <IconButton className={row.usuario} id={row._id} onClick={(e) => {
+                          denied(row.usuario, row._id)
+
+                        }} ><ClearIcon className={row.usuario} id={row._id} /></IconButton>
+                      </TableCell>
+                      {/* <TableCell id='eliminar' align="right" ><DeleteIcon id={row._id} onClick={deleteClass} /></TableCell> */}
+
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </CardContent>
         </Card>
       </div>

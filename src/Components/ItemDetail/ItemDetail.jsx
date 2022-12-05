@@ -8,11 +8,9 @@ import { TimePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useEffect } from 'react';
 import dayjs from 'dayjs';
-import { getComentarios } from '../../DB/db';
-import Comentario from '../Comentario/Comentario';
 import ContextoAuth from '../../Context/AuthContext';
 import { useContext } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import ComentarioItem from '../ComentarioItem/ComentarioItem';
@@ -23,8 +21,6 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
     const handleClose = () => setOpen(false);
     const [value, setValue] = useState(dayjs('2022-08-18T00:00:00'));
     const [comentarios, setComentarios] = useState([])
-    const [valuecomentario, setvalue] = useState([])
-    const nav = useNavigate()
     const { _id } = useParams()
 
     const { user, isLogged } = useContext(ContextoAuth)
@@ -52,51 +48,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
         catch (err) {
             console.log(err)
         }
-    }, [])
-
-    
-
-    const handleCrearComentario = (e) => {
-        e.preventDefault()
-        
-        const comentario = {
-            clase: _id,
-            usuario: user.email,
-            comentario: e.target[0].value,
-            estado: false,
-            profesor: profesor.email
-        }
-        
-        try {
-            fetch('http://localhost:4000/comments/create', {
-                method: 'post',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(comentario)
-            }).then(
-                response => response.json())
-                .then(response => {
-                    if (response.status === 201) {
-                        Swal.fire({
-                            title: 'Comentario enviado,',
-                            text: 'Su comentario queda pendiente de revision',
-                            icon: 'success',
-                        })
-                            .then(
-                                response => {
-                                    if (response.isConfirmed) {
-                                        window.location.reload()
-                                    }
-                                }
-                            )
-                    }
-                    handleClose()
-                })
-
-
-        } catch (err) {
-            console.log('Error', err)
-        }
-    }
+    }, [_id])
 
     const style = {
         position: 'absolute',
@@ -197,20 +149,6 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                     </div>
                     <div className="producto comentarios">
                         <h2>Comentarios</h2>
-                        <form onSubmit={handleCrearComentario} >
-                            <TextField
-                                fullWidth
-                                id="outlined-multiline-static"
-                                style={{ marginBottom: '10px' }}
-                                label="Comentario"
-                                multiline
-                                rows={4}
-                            />
-                            {
-                                isLogged
-                                    ? <Button size='medium' className='btnContacto' type='submit' variant="contained">Comentar</Button> : <></>
-                            }
-                        </form>
                         <ul className="listado">
                             {comentarios.map(comentario => <ComentarioItem key={comentario._id} {...comentario} />)}
                         </ul>

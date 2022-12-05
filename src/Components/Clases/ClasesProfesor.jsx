@@ -105,8 +105,8 @@ const ClasesProfesor = () => {
     }
     const handleUpdateClass = (e) => {
         e.preventDefault(e)
-        
-        
+
+
         let nuevaClase;
 
         if (e.target.length === 16) {
@@ -137,7 +137,7 @@ const ClasesProfesor = () => {
             }
         });
 
-        
+
 
         fetch('http://localhost:4000/classes/', {
             method: 'put',
@@ -274,11 +274,11 @@ const ClasesProfesor = () => {
                     <TableBody>
                         {ClasesProfesor.map(row => (
                             <TableRow key={row._id}>
-                                <Link to={`/clase/${row._id}`} className='link' style={{ cursor: "pointer" }}>
-                                    <TableCell component="th" scope="row">
+                                <TableCell component="th" scope="row">
+                                    <Link to={`/clase/${row._id}`} className='link' style={{ cursor: "pointer" }}>
                                         {row.materia}
-                                    </TableCell>
-                                </Link>
+                                    </Link>
+                                </TableCell>
                                 <TableCell align="right">{row.tipo}</TableCell>
                                 <TableCell align="right">{row.duracion}</TableCell>
                                 <TableCell align="right">{row.frecuencia}</TableCell>

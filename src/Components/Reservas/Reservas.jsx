@@ -1,21 +1,23 @@
 import { useState, useEffect, useContext } from "react";
-import { TableCell, TableRow, Button, Table, TableHead, TextField, TableBody, InputAdornment, InputLabel, Modal, Box, OutlinedInput, Typography, IconButton, Stack } from "@mui/material";
-import CreateIcon from '@mui/icons-material/Create';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { TableCell, TableRow, Button, Table, TableHead, TextField, TableBody, Modal, Box, Typography, IconButton, Stack } from "@mui/material";
 import ContextoAuth from "../../Context/AuthContext";
 import CommentIcon from '@mui/icons-material/Comment';
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 
 const Reservas = () => {
     const [contactos, setContactos] = useState([])
     const { user } = useContext(ContextoAuth)
-    
+    const [comentario, setComentario] = useState('')
+    const [claseAcomentar, setClaseComentar] = useState({})
     const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    // 
+    function handleOpen(row) {
+        setClaseComentar(row)
+        setOpen(true)
+    }
 
     useEffect(() => {
         const obj = {
@@ -35,7 +37,7 @@ const Reservas = () => {
         }
     }, [user.email])
 
-    
+
 
     const styles = {
         position: 'absolute',
@@ -49,71 +51,48 @@ const Reservas = () => {
         p: 4,
     };
 
-    const inputs = {
-        marginBottom: '20px'
-    }
 
     const handleSendComment = (e) => {
         e.preventDefault(e)
-        
-        
-        let newcomment;
-    
-        if (e.target.length === 16) {
-            newcomment = {
-                comentario: e.target.comentario,
-                alumno: user.name + ' ' + user.apellido
-
-                // _id: idUpdate,
-                // tipo: e.target[0].value,
-                // materia: e.target[2].value,
-                // duracion: e.target[6].value,
-                // frecuencia: e.target[8].value,
-                // precio: e.target[10].value,
-                // descripcion: e.target[12].value
-            }
-        } else {
-            newcomment = {
-                // _id: idUpdate,
-                // tipo: e.target[0].value,
-                // materia: e.target[2].value,
-                // duracion: e.target[5].value,
-                // frecuencia: e.target[7].value,
-                // precio: e.target[9].value,
-                // descripcion: e.target[11].value
-            }
+        console.log(claseAcomentar)
+        const nuevoComentario = {
+            comentario: comentario,
+            clase: claseAcomentar._id,
+            usuario: claseAcomentar.mailContacto,
+            profesor: claseAcomentar.profesormail,
+            estado: false
         }
-    
-        Object.keys(newcomment).forEach(key => {
-            if (newcomment[key] === '') {
-                delete newcomment[key];
-            }
-        });
-    
-        
-    
-        // fetch('http://localhost:4000/classes/', {
-        //     method: 'put',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(commentToUpdate)
-        // })
-        // .then(response => response.json())
-        // .then(data => console.log(data))
-        // .then(
-        //   response => response.json().then(response => {
-        //     if (response.message === "Succesfully Created Class") {
-        //       Swal.fire({
-        //         title: 'Comentario aceptado',
-        //         text: 'Ahora se visualiza el comentario en el foro',
-        //         icon: 'success',
-        //         timer: 3000,
-        //         timerProgressBar: true,
-    
-        //       })
-        //     }
-        //     handleClose()
-        //   })
-        // )
+
+        try {
+            fetch('http://localhost:4000/comments/create', {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(nuevoComentario)
+            }).then(
+                response => response.json())
+                .then(response => {
+                    if (response.status === 201) {
+                        Swal.fire({
+                            title: 'Comentario enviado,',
+                            text: 'Su comentario queda pendiente de revision',
+                            icon: 'success',
+                        })
+                            .then(
+                                response => {
+                                    if (response.isConfirmed) {
+                                        window.location.reload()
+                                    }
+                                }
+                            )
+                    }
+                    handleClose()
+                })
+
+
+        } catch (err) {
+            console.log('Error', err)
+        }
+
     }
 
     return (
@@ -125,16 +104,17 @@ const Reservas = () => {
             aria-describedby="modal-modal-description">
             <Box sx={styles}>
                 <Typography style={{ marginBottom: '10px' }} id="modal-modal-title" variant="h5" component="h2">
-                    Rechazar Comentario
+                    Comentar Clase
                 </Typography>
-                <h4>Por favor describa el motivo de rechazo del comentario</h4>
+                <h4>Escriba debajo su comentario: </h4>
                 <TextField
                     fullWidth
                     id="outlined-multiline-static"
                     style={{ marginBottom: '10px' }}
-                    label="Descripcion Rechazo"
+                    label="Descripcion"
                     multiline
-                    rows={4} />
+                    rows={4}
+                    onChange={(e) => setComentario(e.target.value)} />
                 <form onSubmit={handleSendComment}>
                     <Stack spacing={2} direction="row">
                         <Button style={{ display: "block" }} type='submit' variant="contained">Aceptar</Button>
@@ -158,20 +138,29 @@ const Reservas = () => {
                     </TableHead>
                     <TableBody>
                         {contactos.map(row => (
-                            
+
                             <TableRow key={row._id}>
-                                <Link to={`/clase/${row._id}`} className='link' style={{ cursor: "pointer" }}>
-                                    <TableCell component="th" scope="row">
+
+                                <TableCell component="th" scope="row">
+                                    <Link to={`/clase/${row._id}`} className='link' style={{ cursor: "pointer" }}>
                                         {row._id}
-                                    </TableCell>
-                                </Link>
+                                    </Link>
+                                </TableCell>
+
                                 <TableCell align="center">{row.horario}</TableCell>
                                 <TableCell align="center">{row.profesormail}</TableCell>
                                 <TableCell align="center">{row.estado}</TableCell>
 
-                                <TableCell align="center">
-                                    <IconButton onClick={handleOpen} id={row._id}><CommentIcon /></IconButton>
-                                </TableCell>
+                                {
+                                    row.estado === "Aceptada"
+                                        ?
+                                        <TableCell align="center">
+                                            <IconButton onClick={(e) => handleOpen(row)} id={row._id}><CommentIcon /></IconButton>
+                                        </TableCell>
+                                        : <TableCell align="center">
+                                            <h5>Podrá comentar una vez aceptada la clase</h5>
+                                        </TableCell>
+                                }
                             </TableRow>
                         ))}
                     </TableBody>

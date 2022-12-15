@@ -40,8 +40,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                 )
                 .then(
                     data => {
-                        setComentarios(data.data.docs.filter(clase => clase.clase === _id && clase.estado))
-                        // 
+                        setComentarios(data.data.docs.filter(clase => clase.clase === _id && clase.estado))  
                     }
                 )
         }
@@ -90,7 +89,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                     data => {
                         if (data.status === 201) {
                             Swal.fire({
-                                title: 'Comentario Enviado',
+                                title: 'Reserva Creada',
                                 text: 'Su solicitud fue enviada con éxito',
                                 icon: 'success',
                                 timer: 3000,

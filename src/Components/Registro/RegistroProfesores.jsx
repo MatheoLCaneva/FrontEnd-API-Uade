@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 import './Registro.css'
+import CircularIndeterminate from '../Loader/Loader';
 import { useNavigate } from 'react-router-dom';
 
 const RegistroProfesores = () => {
@@ -15,6 +16,7 @@ const RegistroProfesores = () => {
     const [imgUser, setImgUser] = useState('')
     const { register, handleSubmit } = useForm()
     const [imagenes, setImagenes] = useState('')
+    const [cargando, setCargando] = useState(false)
     const [fotoId, setFotoId] = useState(0)
     const nav = useNavigate()
 
@@ -29,7 +31,7 @@ const RegistroProfesores = () => {
                 url: r.target.result
             }
 
-            
+
 
             setImagenes(newImagen);
         };
@@ -40,6 +42,7 @@ const RegistroProfesores = () => {
     }
 
     const handleRegisterProfesor = async (event, e) => {
+        setCargando(true)
         var contraseña = document.querySelector('#password').value
         var repContraseña = document.querySelector('#confirmPassword').value
         if (contraseña === repContraseña) {
@@ -47,7 +50,7 @@ const RegistroProfesores = () => {
 
             try {
                 if (imagenes) {
-                    
+
                     const data = new FormData();
                     data.append('file', imagenes.url);
                     data.append('upload_preset', 'utvjoiww');
@@ -60,7 +63,7 @@ const RegistroProfesores = () => {
                         }
                     );
                     const file = await res.json();
-                    
+
                     event.imgUser = file.secure_url
                 }
 
@@ -72,19 +75,34 @@ const RegistroProfesores = () => {
                 }).then(
                     (response) => response.json()
                 ).then(data => {
-                    sessionStorage.setItem('token', data.createdUser)
-                    Swal.fire({
-                        title: 'Registro Exitoso',
-                        text: 'Su usuario se registro con exito. !Bienvenido!',
-                        icon: 'success',
-                        timer: 3000,
-                        timerProgressBar: true,
-                    })
-                    nav("/")
+                    if (data.status === 200) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Ya existe usuario con el mail indicado',
+                            icon: 'error',
+                            timer: 3000,
+                            timerProgressBar: true,
+                        })
+                    }
+                    else if (data.status === 201) {
+                        sessionStorage.setItem('token', data.createdUser)
+                        Swal.fire({
+                            title: 'Registro Exitoso',
+                            text: 'Su usuario se registro con exito. !Bienvenido!',
+                            icon: 'success',
+                            timer: 3000,
+                            timerProgressBar: true,
+                        })
+                        nav("/")
+                    }
+
                 })
 
             } catch (err) {
                 console.log(err)
+            }
+            finally {
+                setCargando(false)
             }
         } else {
             Swal.fire({
@@ -100,36 +118,47 @@ const RegistroProfesores = () => {
 
 
     }
-    return (
-        <Grid>
-            <Paper className='registro'>
-                <Grid align='center'>
-                    <Avatar style={avatarStyle}>
-                        <AddCircleOutlineOutlinedIcon />
-                    </Avatar>
-                    <h2 style={headerStyle}>Registro Profesores</h2>
-                    <Typography variant='caption' gutterBottom>Ingrese sus datos para crear una cuenta</Typography>
-                </Grid>
-                <form onSubmit={handleSubmit(handleRegisterProfesor)}>
-                    <TextField required fullWidth label='Nombre' placeholder="Nombre" style={TextfieldStyle} {...register('name')} />
-                    <TextField required fullWidth label='Apellido' placeholder="Apellido" style={TextfieldStyle} {...register('apellido')} />
-                    <TextField required fullWidth label='Email' placeholder="Email" style={TextfieldStyle} {...register('email')} />
-                    <TextField required fullWidth label='Telefono' placeholder="Telefono" style={TextfieldStyle} {...register('tel')} />
-                    <TextField required fullWidth label='Password' placeholder="Contraseña" type='password' style={TextfieldStyle} id='password' {...register('password')} />
-                    <TextField required fullWidth label='Confirm Password' placeholder="Repetir Contraseña" type='password' style={TextfieldStyle} id='confirmPassword' />
-                    <TextField required fullWidth label='Titulo' placeholder="Titulo" style={TextfieldStyle} {...register('title')} />
-                    <TextField required fullWidth label='Experiencia' placeholder="Experiencia" style={TextfieldStyle} {...register('experience')} />
-                    <TextField required fullWidth multiline={true} label='Biografia' placeholder="Fecha Nacimiento" style={TextfieldStyle} id='descripcionPorfesor' {...register('descripcionProfesor')} />
 
-                    <p>Foto de Perfil</p>
+    if (cargando) {
+        return (
+            <div>
+                <CircularIndeterminate />
+            </div>
+        )
+    }
+    else {
+        return (
+            <Grid>
+                <Paper className='registro'>
+                    <Grid align='center'>
+                        <Avatar style={avatarStyle}>
+                            <AddCircleOutlineOutlinedIcon />
+                        </Avatar>
+                        <h2 style={headerStyle}>Registro Profesores</h2>
+                        <Typography variant='caption' gutterBottom>Ingrese sus datos para crear una cuenta</Typography>
+                    </Grid>
+                    <form onSubmit={handleSubmit(handleRegisterProfesor)}>
+                        <TextField required fullWidth label='Nombre' placeholder="Nombre" style={TextfieldStyle} {...register('name')} />
+                        <TextField required fullWidth label='Apellido' placeholder="Apellido" style={TextfieldStyle} {...register('apellido')} />
+                        <TextField required fullWidth label='Email' placeholder="Email" style={TextfieldStyle} {...register('email')} />
+                        <TextField required fullWidth label='Telefono' placeholder="Telefono" style={TextfieldStyle} {...register('tel')} />
+                        <TextField required fullWidth label='Password' placeholder="Contraseña" type='password' style={TextfieldStyle} id='password' {...register('password')} />
+                        <TextField required fullWidth label='Confirm Password' placeholder="Repetir Contraseña" type='password' style={TextfieldStyle} id='confirmPassword' />
+                        <TextField required fullWidth label='Titulo' placeholder="Titulo" style={TextfieldStyle} {...register('title')} />
+                        <TextField required fullWidth label='Experiencia' placeholder="Experiencia" style={TextfieldStyle} {...register('experience')} />
+                        <TextField required fullWidth multiline={true} label='Biografia' placeholder="Fecha Nacimiento" style={TextfieldStyle} id='descripcionPorfesor' {...register('descripcionProfesor')} />
 
-                    {/* <input accept='image/*' onChange={handleInput} id='imagen' type='file' label='Foto de Perfil' style={TextfieldStyle} /> */}
-                    <input accept="image/*" type="file" onChange={hanndleInput} />
-                    <Button sx={{ mt: 3 }} type='submit' variant='contained' style={marginTop} color='primary'>Registrarse</Button>
-                </form>
-            </Paper>
-        </Grid>
-    )
+                        <p>Foto de Perfil</p>
+
+                        {/* <input accept='image/*' onChange={handleInput} id='imagen' type='file' label='Foto de Perfil' style={TextfieldStyle} /> */}
+                        <input accept="image/*" type="file" onChange={hanndleInput} />
+                        <Button sx={{ mt: 3 }} type='submit' variant='contained' style={marginTop} color='primary'>Registrarse</Button>
+                    </form>
+                </Paper>
+            </Grid>
+        )
+    }
+
 }
 export default RegistroProfesores;
 

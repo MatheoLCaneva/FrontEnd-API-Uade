@@ -1,5 +1,4 @@
 import ItemDetail from "../ItemDetail/ItemDetail";
-import { getClases } from "../../DB/db";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CircularIndeterminate from "../Loader/Loader";
@@ -29,7 +28,7 @@ const ItemDetailContainer = () => {
                 setCargando(false)
             }
         )
-    }, [])
+    }, [_id])
 
     if (cargando) {
         return (

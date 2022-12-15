@@ -21,4 +21,8 @@
     .cardClase {
         margin: 20px 0px;
     }
+
+    .MuiCard-root {
+        width: 90%;
+    }
 }

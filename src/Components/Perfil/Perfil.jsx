@@ -8,7 +8,7 @@ import Swal from "sweetalert2"
 const Perfil = () => {
 
     const { user, logOffUser, loginUser } = useContext(ContextoAuth)
-    
+
     const nav = useNavigate()
     const handleLogOff = () => {
         logOffUser()
@@ -17,44 +17,43 @@ const Perfil = () => {
 
     const handleUpdate = async (e) => {
         e.preventDefault()
-        if (user.rol === 'Estudiante') {
-            const nuevosDatos = {
-                _id: user._id,
-                email: e.target[4].value,
-                tel: e.target[6].value
-            }
-
-            try {
-                await fetch('http://localhost:4000/users/', {
-                    method: 'put',
-                    headers: { 'Content-Type': 'application/json', "x-access-token": `${localStorage.getItem('token')}` },
-                    body: JSON.stringify(nuevosDatos)
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 200) {
-                            Swal.fire({
-                                title: 'Datos Actualizados',
-                                text: 'Sus datos fueron actualizados con exito',
-                                icon: 'success'
-                            })
-                                .then(response => {
-                                    if (response.isConfirmed === true) {
-                                        window.location.reload()
-                                    }
-                                })
-
-                            loginUser(data.data)
-                            localStorage.setItem('user', JSON.stringify(data.data))
-
-
-                        }
-                    })
-            }
-            catch (err) {
-                console.log(err)
-            }
+        const nuevosDatos = {
+            _id: user._id,
+            email: e.target[4].value,
+            tel: e.target[6].value
         }
+
+        try {
+            await fetch('http://localhost:4000/users/', {
+                method: 'put',
+                headers: { 'Content-Type': 'application/json', "x-access-token": `${localStorage.getItem('token')}` },
+                body: JSON.stringify(nuevosDatos)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 200) {
+                        Swal.fire({
+                            title: 'Datos Actualizados',
+                            text: 'Sus datos fueron actualizados con exito',
+                            icon: 'success'
+                        })
+                            .then(response => {
+                                if (response.isConfirmed === true) {
+                                    window.location.reload()
+                                }
+                            })
+
+                        loginUser(data.data)
+                        localStorage.setItem('user', JSON.stringify(data.data))
+
+
+                    }
+                })
+        }
+        catch (err) {
+            console.log(err)
+        }
+
 
 
     }

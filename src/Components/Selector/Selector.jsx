@@ -14,7 +14,7 @@ const Selector = ({ idSelector, variable, variable1, variable2, variable3 }) => 
     };
 
     return (
-        <Box sx={{ minWidth: 120 }}>
+        <Box sx={{ minWidth: 120, margin: '20px 0' }}>
             <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">{variable}</InputLabel>
                 <Select

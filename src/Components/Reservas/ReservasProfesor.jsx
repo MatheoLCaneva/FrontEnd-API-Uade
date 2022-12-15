@@ -16,7 +16,7 @@ const ReservasProfesor = () => {
         const obj = {
             profesormail: user.email
         }
-        
+
         try {
             fetch('http://localhost:4000/contacts/contactsByMail', {
                 method: 'post',
@@ -37,7 +37,7 @@ const ReservasProfesor = () => {
             _id: e.target.parentElement.id,
             estado: 'Aceptada'
         }
-        
+
         try {
             fetch('http://localhost:4000/contacts/', {
                 method: 'put',
@@ -63,8 +63,34 @@ const ReservasProfesor = () => {
         }
     }
 
-    const deniedSchedule = () => {
+    const deniedSchedule = (e) => {
+        const obj = {
+            _id: e.target.parentElement.id,
+            estado: 'Rechazada'
+        }
+        try {
+            fetch('http://localhost:4000/contacts/', {
+                method: 'put',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(obj)
+            }).then(
+                response => response.json().then(response => {
+                    if (response.status === 200) {
+                        Swal.fire({
+                            title: 'Reserva Denegada',
+                            text: 'La reserva fue denegada con éxito',
+                            icon: 'success',
+                            timer: 4000,
+                            timerProgressBar: true,
 
+                        })
+                    }
+                })
+            )
+        }
+        catch (err) {
+            alert(err)
+        }
     }
 
 
@@ -86,17 +112,30 @@ const ReservasProfesor = () => {
                     <TableBody>
                         {contactos.map(row => (
                             <TableRow key={row._id}>
-                                <Link to={`/clase/${row._id}`} className='link' style={{ cursor: "pointer" }}>
-                                    <TableCell component="th" scope="row">
-                                        {row._id}
-                                    </TableCell>
-                                </Link>
+                                <TableCell component="th" scope="row">
+                                    <Link to={`/clase/${row.claseId}`} className='link' style={{ cursor: "pointer" }}>
+                                        {row.claseId}
+                                    </Link>
+                                </TableCell>
                                 <TableCell align="center">{row.horario}</TableCell>
                                 <TableCell align="center">{row.mailContacto}</TableCell>
                                 <TableCell align="center">{row.telefonoContacto}</TableCell>
                                 <TableCell align="center">{row.estado}</TableCell>
-                                <TableCell align="center" id={row._id}><DoneIcon id={row._id} onClick={acceptSchedule} /></TableCell>
-                                <TableCell id='eliminar' align="right" ><DeleteIcon id={row._id} onClick={deniedSchedule} /></TableCell>
+
+                                {
+                                    row.estado === "Aceptada" || row.estado === "Rechazada"
+                                        ? null
+                                        :
+                                        <TableCell align="center" id={row._id}><DoneIcon style={{ cursor: "pointer" }} id={row._id} onClick={acceptSchedule} /></TableCell>
+
+                                }
+                                {
+                                    row.estado === "Aceptada" || row.estado === "Rechazada"
+                                        ? null
+                                        :
+                                        <TableCell id='eliminar' align="right" ><DeleteIcon style={{ cursor: "pointer" }} id={row._id} onClick={deniedSchedule} /></TableCell>
+                                }
+
                             </TableRow>
                         ))}
                     </TableBody>

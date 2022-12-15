@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { TableCell, TableRow, Button, Table, TableHead, TextField, TableBody, Modal, Box, Typography, IconButton, Stack } from "@mui/material";
+import { TableCell, TableRow, Button, Table, TableHead, TextField, TableBody, Modal, Box, Typography, IconButton, Stack, Paper, TableContainer } from "@mui/material";
 import ContextoAuth from "../../Context/AuthContext";
 import CommentIcon from '@mui/icons-material/Comment';
 import { Link } from "react-router-dom";
@@ -57,7 +57,7 @@ const Reservas = () => {
         console.log(claseAcomentar)
         const nuevoComentario = {
             comentario: comentario,
-            clase: claseAcomentar._id,
+            clase: claseAcomentar.claseId,
             usuario: claseAcomentar.mailContacto,
             profesor: claseAcomentar.profesormail,
             estado: false
@@ -125,46 +125,47 @@ const Reservas = () => {
         </Modal><div style={{ width: '80%', margin: 'auto' }}>
                 <Typography variant="h3" style={{ fontFamily: "'Montserrat', sans-serif", display: 'flex', justifyContent: 'center', margin: "30px 0" }}>Detalle de reservas</Typography>
 
-
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell align="left">Id de Clase</TableCell>
-                            <TableCell align="center">Horario</TableCell>
-                            <TableCell align="center">Mail Profesor</TableCell>
-                            <TableCell align="center">Estado</TableCell>
-                            <TableCell align="center">Opciones</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {contactos.map(row => (
-
-                            <TableRow key={row._id}>
-
-                                <TableCell component="th" scope="row">
-                                    <Link to={`/clase/${row._id}`} className='link' style={{ cursor: "pointer" }}>
-                                        {row._id}
-                                    </Link>
-                                </TableCell>
-
-                                <TableCell align="center">{row.horario}</TableCell>
-                                <TableCell align="center">{row.profesormail}</TableCell>
-                                <TableCell align="center">{row.estado}</TableCell>
-
-                                {
-                                    row.estado === "Aceptada"
-                                        ?
-                                        <TableCell align="center">
-                                            <IconButton onClick={(e) => handleOpen(row)} id={row._id}><CommentIcon /></IconButton>
-                                        </TableCell>
-                                        : <TableCell align="center">
-                                            <h5>Podrá comentar una vez aceptada la clase</h5>
-                                        </TableCell>
-                                }
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell align="left">Id de Clase</TableCell>
+                                <TableCell align="center">Horario</TableCell>
+                                <TableCell align="center">Mail Profesor</TableCell>
+                                <TableCell align="center">Estado</TableCell>
+                                <TableCell align="center">Opciones</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHead>
+                        <TableBody>
+                            {contactos.map(row => (
+
+                                <TableRow key={row.claseId}>
+
+                                    <TableCell component="th" scope="row">
+                                        <Link to={`/clase/${row.claseId}`} className='link' style={{ cursor: "pointer" }}>
+                                            {row.claseId}
+                                        </Link>
+                                    </TableCell>
+
+                                    <TableCell align="center">{row.horario}</TableCell>
+                                    <TableCell align="center">{row.profesormail}</TableCell>
+                                    <TableCell align="center">{row.estado}</TableCell>
+
+                                    {
+                                        row.estado === "Aceptada"
+                                            ?
+                                            <TableCell align="center">
+                                                <IconButton onClick={(e) => handleOpen(row)} id={row.claseId}><CommentIcon /></IconButton>
+                                            </TableCell>
+                                            : <TableCell align="center">
+                                                <h5>Podrá comentar una vez aceptada la clase</h5>
+                                            </TableCell>
+                                    }
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
 
             </div></>
     )

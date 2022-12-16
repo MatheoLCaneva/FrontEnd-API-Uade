@@ -4,6 +4,8 @@ import ContextoAuth from "../../Context/AuthContext";
 import CommentIcon from '@mui/icons-material/Comment';
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import ClearIcon from '@mui/icons-material/Clear';
+import DoneIcon from '@mui/icons-material/Done';
 import { calculateNewValue } from "@testing-library/user-event/dist/utils";
 
 
@@ -231,18 +233,30 @@ const Reservas = () => {
                                             : <TableCell align="center">
                                             </TableCell>
                                     }
+                                    <TableCell align="center">
                                     {
                                         row.estado === "Aceptada" || row.estado === "Finalizada"
                                             ?
-                                            <TableCell align="center">
+                                            
                                                 <IconButton onClick={(e) => handleOpen(row)} id={row.claseId}>
                                                     <CommentIcon />
                                                 </IconButton>
-                                            </TableCell>
-
-                                            : <TableCell align="center">
-                                            </TableCell>
+                                            :<></>
                                     }
+                                    {
+                                        row.estado === "Aceptada"
+                                        ?
+                                            <IconButton> <DoneIcon></DoneIcon></IconButton>
+                                        :<></>
+                                    }
+                                    {
+                                        row.estado === "Solicitada"
+                                        ?
+                                        <IconButton> <ClearIcon></ClearIcon></IconButton>
+                                        :<></>
+                                    } 
+                                     
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

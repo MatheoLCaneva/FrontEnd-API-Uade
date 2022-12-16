@@ -1,9 +1,10 @@
 import { useState, useEffect, useContext } from "react";
-import { TableCell, TableRow, Button, Table, TableHead, TextField, TableBody, Modal, Box, Typography, IconButton, Stack, Paper, TableContainer } from "@mui/material";
+import { TableCell, TableRow, Button, Table, TableHead, TextField, TableBody, Modal, Box, Typography, IconButton, Stack, Paper, TableContainer, Rating } from "@mui/material";
 import ContextoAuth from "../../Context/AuthContext";
 import CommentIcon from '@mui/icons-material/Comment';
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { calculateNewValue } from "@testing-library/user-event/dist/utils";
 
 
 const Reservas = () => {
@@ -11,6 +12,19 @@ const Reservas = () => {
     const { user } = useContext(ContextoAuth)
     const [comentario, setComentario] = useState('')
     const [claseAcomentar, setClaseComentar] = useState({})
+    const [claseValoracion, setValoracion] = useState
+    (
+        {
+            _id: "",
+            alumno: "",
+            telefonoContacto: "",
+            mailContacto: "",
+            horario: "",
+            estado: "",
+            valoracion:""
+        }
+        
+    )
     const [open, setOpen] = useState(false);
     const handleClose = () => setOpen(false);
 
@@ -95,6 +109,57 @@ const Reservas = () => {
 
     }
 
+    const handleupdatevaloracion = (newValue,row) => 
+    {
+        claseValoracion._id = row._id
+        claseValoracion.alumno = row.alumno
+        claseValoracion.telefonoContacto = row.telefonoContacto
+        claseValoracion.mailContacto = row.mailContacto
+        claseValoracion.horario = row.horario
+        claseValoracion.estado = row.estado
+        claseValoracion.valoracion = newValue
+
+        console.log(claseValoracion);
+        try {
+            fetch('http://localhost:4000/contacts/update', {
+                method: 'put',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(claseValoracion)
+            }).then(res => res.json()).
+            then(() => {
+                setValoracion(
+                {
+                    _id: "",
+                    alumno: "",
+                    telefonoContacto: "",
+                    mailContacto: "",
+                    horario: "",
+                    estado : "",
+                    valoracion : "",
+
+                }).then(response => {
+                    if (response.status === 201) {
+                        Swal.fire({
+                            title: 'Comentario enviado,',
+                            text: 'Su comentario queda pendiente de revision',
+                            icon: 'success',
+                        })
+                            .then(
+                                response => {
+                                    if (response.isConfirmed) {
+                                        window.location.reload()
+                                    }
+                                }
+                            )
+                    }
+                })
+            })
+        }
+        catch (err) {
+            alert(err)
+        }
+    }
+
     return (
 
         <><Modal
@@ -133,6 +198,7 @@ const Reservas = () => {
                                 <TableCell align="center">Horario</TableCell>
                                 <TableCell align="center">Mail Profesor</TableCell>
                                 <TableCell align="center">Estado</TableCell>
+                                <TableCell align="center">Calificacion</TableCell>
                                 <TableCell align="center">Opciones</TableCell>
                             </TableRow>
                         </TableHead>
@@ -155,10 +221,26 @@ const Reservas = () => {
                                         row.estado === "Aceptada"
                                             ?
                                             <TableCell align="center">
-                                                <IconButton onClick={(e) => handleOpen(row)} id={row.claseId}><CommentIcon /></IconButton>
+                                                <Box component="fieldset" mb={3} borderColor="transparent">
+                                                    <Rating name="rating" value={row.valoracion === undefined ? 0 : row.valoracion}
+                                                     onChange = {(e,newValue)=> handleupdatevaloracion(newValue,row)}
+                   
+                                                     />
+                                                </Box>
                                             </TableCell>
                                             : <TableCell align="center">
-                                                <h5>Podrá comentar una vez aceptada la clase</h5>
+                                            </TableCell>
+                                    }
+                                    {
+                                        row.estado === "Aceptada"
+                                            ?
+                                            <TableCell align="center">
+                                                <IconButton onClick={(e) => handleOpen(row)} id={row.claseId}>
+                                                    <CommentIcon />
+                                                </IconButton>
+                                            </TableCell>
+
+                                            : <TableCell align="center">
                                             </TableCell>
                                     }
                                 </TableRow>

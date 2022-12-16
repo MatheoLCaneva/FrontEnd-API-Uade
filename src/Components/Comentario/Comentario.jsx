@@ -21,7 +21,12 @@ const Comentario = () => {
   const handleOpenRechazar = () => setOpenRechazar(true);
   const handleCloseRechazar = () => setOpenRechazar(false);
   const { user } = useContext(ContextoAuth)
-  const [textoRechazo, setTextoRechazo] = useState('')
+  const [textoRechazo, setTextoRechazo] = useState
+    ({
+      name: "",
+      email: "",
+      mensaje: "",
+    })
 
   useEffect(() => {
     const obj = {
@@ -58,11 +63,41 @@ const Comentario = () => {
     handleOpenRechazar()
   }
 
+  function handleStateChange(e) {
+    setTextoRechazo((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  }
+
   const handleDeleteComment = (e) => {
     e.preventDefault()
     const obj = {
       comentarioId: idUpdate,
       usuario: emailUsuario
+    }
+    console.log(e)
+
+    try {
+      textoRechazo.email = emailUsuario
+      console.log(textoRechazo)
+      fetch('http://localhost:4000/comments/sendMail/',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({textoRechazo})
+        }).then(res => res.json())
+        .then(() => {
+          setTextoRechazo({
+            email: "",
+            name: "",
+            mensaje: "",
+          });
+        })
+
+    }
+    catch (e) {
+      console.log(e)
     }
 
 
@@ -180,12 +215,14 @@ const Comentario = () => {
           <h4>Por favor describa el motivo de rechazo del comentario</h4>
           <TextField
             fullWidth
-            id="textoRechazo"
+            id="mensaje"
+            name="mensaje"
             style={{ marginBottom: '10px' }}
             label="Descripcion Rechazo"
             multiline
             rows={4}
-            onChange={(e) => setTextoRechazo(e.target.value)}
+            onChange={handleStateChange}
+            value={textoRechazo.mensaje}
           />
           <form onSubmit={handleDeleteComment}>
             <Stack spacing={2} direction="row">

@@ -15,6 +15,7 @@ import { Auth } from './Context/AuthContext'
 import Comentario from './Components/Comentario/Comentario';
 import Reservas from './Components/Reservas/Reservas';
 import ReservasProfesor from './Components/Reservas/ReservasProfesor';
+import Bienvenida from './Components/Bienvenida/Bienvenida';
 
 function App() {
   
@@ -33,7 +34,8 @@ function App() {
           <Route path='/Comentarios' element={<Comentario />} />
           <Route path='/Reservas' element={<Reservas/>} />
           <Route path='/ReservasProfesor' element={<ReservasProfesor/>} />
-          <Route path='/' element={<ItemListContainer mensaje={"Listado de Profesores"} />} />
+          <Route path='/ListadoProfesores' element={<ItemListContainer mensaje={"Listado de Profesores"} />} />
+          <Route path='/' element= {<Bienvenida/>}/>
         </Routes>
       </Router>
     </Auth>

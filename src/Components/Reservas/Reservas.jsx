@@ -219,7 +219,7 @@ const Reservas = () => {
                                     <TableCell align="center">{row.estado}</TableCell>
 
                                     {
-                                        row.estado === "Aceptada"
+                                        row.estado === "Aceptada" || row.estado === "Finalizada"
                                             ?
                                             <TableCell align="center">
                                                 <Box component="fieldset" mb={3} borderColor="transparent">
@@ -233,7 +233,7 @@ const Reservas = () => {
                                             </TableCell>
                                     }
                                     {
-                                        row.estado === "Aceptada"
+                                        row.estado === "Aceptada" || row.estado === "Finalizada"
                                             ?
                                             <TableCell align="center">
                                                 <IconButton onClick={(e) => handleOpen(row)} id={row.claseId}>

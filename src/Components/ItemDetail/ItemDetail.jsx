@@ -40,7 +40,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                 )
                 .then(
                     data => {
-                        setComentarios(data.data.docs.filter(clase => clase.clase === _id && clase.estado))  
+                        setComentarios(data.data.docs.filter(clase => clase.clase === _id && clase.estado))
                     }
                 )
         }
@@ -85,23 +85,40 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                 .then(
                     response => response.json()
                 )
-                .then(
-                    data => {
-                        if (data.status === 201) {
-                            Swal.fire({
-                                title: 'Reserva Creada',
-                                text: 'Su solicitud fue enviada con éxito',
-                                icon: 'success',
-                                timer: 3000,
-                                timerProgressBar: true,
-
-                            })
-                        }
-                    }
-                )
             handleClose()
         } catch (err) {
             console.log(err)
+        }
+
+        finally {
+            const tiempoTranscurrido = Date.now();
+            const hoy = new Date(tiempoTranscurrido);
+
+            const obj = {
+                email: user.email,
+                asunto: 'Reserva Creada',
+                name: user.name,
+                apellido: user.apellido,
+                mensaje: `La reserva creada con fecha ${hoy.toLocaleDateString()} fue enviada al profesor. Para contactarlo puede enviar un mail a ${contacto.profesormail}. </br> Gracias por utilizar nuestra plataforma.`
+            }
+            fetch('http://localhost:4000/comments/sendMail/',
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ obj })
+                }).then(response => response.json())
+                .then(data => {
+                    if (data.status === 200) {
+                        Swal.fire({
+                            title: 'Reserva Creada',
+                            text: 'Su solicitud fue enviada con éxito',
+                            icon: 'success',
+                            timer: 3000,
+                            timerProgressBar: true,
+
+                        })
+                    }
+                })
         }
     }
 

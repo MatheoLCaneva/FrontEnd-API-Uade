@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import './Item.css'
 
-const Item = ({ nombre, apellido, precio, materia, tipo, frecuencia, duracion, calificacion, profesor, id, _id }) => {
+const Item = ({ nombre, apellido, precio, materia, tipo, frecuencia, duracion, valoracion, profesor, id, _id }) => {
     
 
     return (
@@ -25,7 +25,7 @@ const Item = ({ nombre, apellido, precio, materia, tipo, frecuencia, duracion, c
                     </Typography>
                     <Typography variant="h5" color="text.secondary">
                         Precio: {precio}/h <br />
-                        Calificacion: {calificacion}/10
+                        Calificacion: {Math.round(valoracion)}/5
                     </Typography>
                 </CardContent>
             </CardActionArea>

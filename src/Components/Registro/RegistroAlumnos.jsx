@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import './Registro.css'
 import { useState } from 'react';
+import CircularIndeterminate from '../Loader/Loader';
+import { useNavigate } from 'react-router-dom';
 
 const RegistroAlumnos = () => {
     const headerStyle = { margin: 0 }
@@ -25,6 +27,9 @@ const RegistroAlumnos = () => {
     const [estudioName, setEstudioName] = React.useState([]);
     const [imagenes, setImagenes] = useState('')
     const [fotoId, setFotoId] = useState(0)
+    const [cargando, setCargando] = useState(false)
+    const nav = useNavigate()
+
 
     const estudios = ['Primario', 'Secundario', 'Terciario', 'Universitario']
 
@@ -38,7 +43,7 @@ const RegistroAlumnos = () => {
                 url: r.target.result
             }
 
-            
+
 
             setImagenes(newImagen);
         };
@@ -59,6 +64,7 @@ const RegistroAlumnos = () => {
     };
 
     const handleRegisterUser = async (event) => {
+        setCargando(true)
         // event.preventDefault()
         var contraseña = document.querySelector('#password').value
         var repContraseña = document.querySelector('#confirmPassword').value
@@ -67,7 +73,7 @@ const RegistroAlumnos = () => {
 
             try {
                 if (imagenes) {
-                    
+
                     const data = new FormData();
                     data.append('file', imagenes.url);
                     data.append('upload_preset', 'utvjoiww');
@@ -80,7 +86,7 @@ const RegistroAlumnos = () => {
                         }
                     );
                     const file = await res.json();
-                    
+
                     event.imgUser = file.secure_url
                 }
                 fetch('http://localhost:4000/users/registration', {
@@ -91,7 +97,51 @@ const RegistroAlumnos = () => {
                 }).then(
                     (response) => response.json()
                 ).then(data => {
-                    localStorage.setItem('token', data.createdUser)
+                    if (data.status === 200) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Ya existe usuario con el mail indicado',
+                            icon: 'error',
+                            timer: 3000,
+                            timerProgressBar: true,
+                        })
+                        setCargando(false)
+
+                    }
+                    else if (data.status === 201) {
+                        const obj = {
+                            tipo: 1,
+                            email: event.email,
+                            asunto: 'Bienvenido/a',
+                            name: event.name,
+                            apellido: event.apellido,
+                            mensaje: `Usted se ha registrado con éxito en nuestra plataforma, esperamos que encuentre próximamente su profesor ideal.`,
+                            tel: event.tel
+
+                        }
+                        console.log(obj)
+                        fetch('http://localhost:4000/comments/sendMail/',
+                            {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ obj })
+                            }).then(response => response.json())
+                            .then(data => {
+                                if (data.status === 200) {
+                                    Swal.fire({
+                                        title: 'Registro Exitoso',
+                                        text: 'Su usuario se registro con exito. !Bienvenido!',
+                                        icon: 'success',
+                                    })
+                                        .then(res => {
+                                            setCargando(false)
+                                            if (res.isConfirmed) {
+                                                nav('/')
+                                            }
+                                        })
+                                }
+                            })
+                    }
                 })
             } catch (err) {
                 console.log(err)
@@ -112,70 +162,81 @@ const RegistroAlumnos = () => {
 
     }
 
-    return (
-        <Grid>
-            <Paper className='registro'>
-                <Grid align='center'>
-                    <Avatar style={avatarStyle}>
-                        <AddCircleOutlineOutlinedIcon />
-                    </Avatar>
-                    <h2 style={headerStyle}>Registro Alumnos</h2>
-                    <Typography variant='caption' gutterBottom>Ingrese sus datos para crear una cuenta</Typography>
-                </Grid>
-                <form onSubmit={handleSubmit(handleRegisterUser)}>
-                    <TextField required fullWidth label='Nombre' placeholder="Nombre" id='nombre' {...register('name')} />
-                    <TextField required fullWidth label='Apellido' placeholder="Apellido" style={TextfieldStyle} id='apellido' {...register('apellido')} />
-                    <TextField required fullWidth label='Email' placeholder="Email" style={TextfieldStyle} id='email' {...register('email')} />
-                    <TextField required fullWidth label='Telefono' placeholder="Telefono" style={TextfieldStyle} id='telefono' {...register('tel')} />
-                    <TextField required fullWidth label='Password' placeholder="Enter your password" type="password" style={TextfieldStyle} id='password' {...register('password')} />
-                    <TextField required fullWidth label='Confirm Password' placeholder="Confirm your password" type="password" style={TextfieldStyle} id='confirmPassword' />
-                    <TextField required fullWidth label='Fecha Nacimiento' placeholder="Fecha Nacimiento" style={TextfieldStyle} id='nacimiento' {...register('birth')} />
+    if (cargando) {
+        return (
+            <div>
+                <CircularIndeterminate />
+            </div>
+        )
+    }
 
-                    <p>Estudios</p>
+    else {
+        return (
+            <Grid>
+                <Paper className='registro'>
+                    <Grid align='center'>
+                        <Avatar style={avatarStyle}>
+                            <AddCircleOutlineOutlinedIcon />
+                        </Avatar>
+                        <h2 style={headerStyle}>Registro Alumnos</h2>
+                        <Typography variant='caption' gutterBottom>Ingrese sus datos para crear una cuenta</Typography>
+                    </Grid>
+                    <form onSubmit={handleSubmit(handleRegisterUser)}>
+                        <TextField required fullWidth label='Nombre' placeholder="Nombre" id='nombre' {...register('name')} />
+                        <TextField required fullWidth label='Apellido' placeholder="Apellido" style={TextfieldStyle} id='apellido' {...register('apellido')} />
+                        <TextField required fullWidth label='Email' placeholder="Email" style={TextfieldStyle} id='email' {...register('email')} />
+                        <TextField required fullWidth label='Telefono' placeholder="Telefono" style={TextfieldStyle} id='telefono' {...register('tel')} />
+                        <TextField required fullWidth label='Password' placeholder="Enter your password" type="password" style={TextfieldStyle} id='password' {...register('password')} />
+                        <TextField required fullWidth label='Confirm Password' placeholder="Confirm your password" type="password" style={TextfieldStyle} id='confirmPassword' />
+                        <TextField required fullWidth label='Fecha Nacimiento' placeholder="Fecha Nacimiento" style={TextfieldStyle} id='nacimiento' {...register('birth')} />
 
-                    <FormControl fullWidth>
-                        <InputLabel id="demo-multiple-chip-label">Estudios</InputLabel>
-                        <Select
-                            {...register('estudios')}
-                            labelId="demo-multiple-chip-label"
-                            id="demo-multiple-chip"
-                            multiple
-                            value={estudioName}
-                            onChange={handleChange}
-                            input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                            renderValue={(selected) => (
-                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                    {selected.map((value) => (
-                                        <Chip key={value} label={value} />
-                                    ))}
-                                </Box>
-                            )}
-                            MenuProps={MenuProps}
-                        >
+                        <p>Estudios</p>
 
-                            {estudios.map((estudio) => (
-                                <MenuItem
-                                    key={estudio}
-                                    value={estudio}
-                                >
-                                    {estudio}
-                                </MenuItem>
-                            ))}
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-multiple-chip-label">Estudios</InputLabel>
+                            <Select
+                                {...register('estudios')}
+                                labelId="demo-multiple-chip-label"
+                                id="demo-multiple-chip"
+                                multiple
+                                value={estudioName}
+                                onChange={handleChange}
+                                input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                                renderValue={(selected) => (
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                        {selected.map((value) => (
+                                            <Chip key={value} label={value} />
+                                        ))}
+                                    </Box>
+                                )}
+                                MenuProps={MenuProps}
+                            >
 
-                        </Select>
+                                {estudios.map((estudio) => (
+                                    <MenuItem
+                                        key={estudio}
+                                        value={estudio}
+                                    >
+                                        {estudio}
+                                    </MenuItem>
+                                ))}
 
-                    </FormControl>
+                            </Select>
 
-                    <p>Foto de Perfil</p>
+                        </FormControl>
 
-                    {/* <input accept='image/*' onChange={handleInput} id='imagen' type='file' label='Foto de Perfil' style={TextfieldStyle} /> */}
-                    <input accept="image/*" type="file" onChange={hanndleInput} />
+                        <p>Foto de Perfil</p>
 
-                    <Button sx={{ mt: 3 }} type='submit' variant='contained' color='primary'>Registrarse</Button>
-                </form>
-            </Paper>
-        </Grid>
-    )
+                        {/* <input accept='image/*' onChange={handleInput} id='imagen' type='file' label='Foto de Perfil' style={TextfieldStyle} /> */}
+                        <input accept="image/*" type="file" onChange={hanndleInput} />
+
+                        <Button sx={{ mt: 3 }} type='submit' variant='contained' color='primary'>Registrarse</Button>
+                    </form>
+                </Paper>
+            </Grid>
+        )
+    }
+
 }
 export default RegistroAlumnos;
 

@@ -13,18 +13,10 @@ const Reservas = () => {
     const [comentario, setComentario] = useState('')
     const [claseAcomentar, setClaseComentar] = useState({})
     const [claseValoracion, setValoracion] = useState
-    (
-        {
-            _id: "",
-            alumno: "",
-            telefonoContacto: "",
-            mailContacto: "",
-            horario: "",
-            estado: "",
-            valoracion:""
-        }
-        
-    )
+        (
+            {}
+
+        )
     const [open, setOpen] = useState(false);
     const handleClose = () => setOpen(false);
 
@@ -84,81 +76,90 @@ const Reservas = () => {
                 body: JSON.stringify(nuevoComentario)
             }).then(
                 response => response.json())
-                .then(response => {
-                    if (response.status === 201) {
-                        Swal.fire({
-                            title: 'Comentario enviado,',
-                            text: 'Su comentario queda pendiente de revision',
-                            icon: 'success',
-                        })
-                            .then(
-                                response => {
-                                    if (response.isConfirmed) {
-                                        window.location.reload()
-                                    }
-                                }
-                            )
-                    }
-                    handleClose()
-                })
-
+            handleClose()
 
         } catch (err) {
             console.log('Error', err)
         }
 
+        finally {
+            const obj = {
+                email: user.email,
+                asunto: 'Comentario Enviado',
+                name: user.name,
+                apellido: user.apellido,
+                mensaje: 'Gracias por su comentario, el mismo quedará registrado a espera de que el profesor asignado lo apruebe.'
+            }
+            fetch('http://localhost:4000/comments/sendMail/',
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ obj })
+                }).then(response => response.json())
+                .then(data => {
+                    if (data.status === 200) {
+                        Swal.fire({
+                            title: 'Clase Comentada,',
+                            text: 'El comentario pasó a revisión',
+                            icon: 'success',
+                        })
+                            .then(res => {
+                                if (res.isConfirmed) {
+                                    window.location.reload()
+                                }
+                            })
+                    }
+                })
+        }
+
     }
 
-    const handleupdatevaloracion = (newValue,row) => 
-    {
-        claseValoracion._id = row._id
-        claseValoracion.alumno = row.alumno
-        claseValoracion.telefonoContacto = row.telefonoContacto
-        claseValoracion.mailContacto = row.mailContacto
-        claseValoracion.horario = row.horario
-        claseValoracion.estado = row.estado
+    const handleupdatevaloracion = (newValue, row) => {
+        claseValoracion._id = row.claseId
         claseValoracion.valoracion = newValue
-
-        console.log(claseValoracion);
+        claseValoracion.email = row.mailContacto
         try {
-            fetch('http://localhost:4000/contacts/update', {
+            fetch('http://localhost:4000/classes/rating', {
                 method: 'put',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(claseValoracion)
-            }).then(res => res.json()).
-            then(() => {
-                setValoracion(
-                {
-                    _id: "",
-                    alumno: "",
-                    telefonoContacto: "",
-                    mailContacto: "",
-                    horario: "",
-                    estado : "",
-                    valoracion : "",
-
-                }).then(response => {
-                    if (response.status === 201) {
-                        Swal.fire({
-                            title: 'Comentario enviado,',
-                            text: 'Su comentario queda pendiente de revision',
-                            icon: 'success',
-                        })
-                            .then(
-                                response => {
-                                    if (response.isConfirmed) {
-                                        window.location.reload()
-                                    }
-                                }
-                            )
-                    }
-                })
-            })
-        }
-        catch (err) {
+            }).then(res => res.json())
+        } catch (err) {
             alert(err)
         }
+        finally {
+            const obj = {
+                email: user.email,
+                asunto: 'Calificacion Enviada',
+                name: user.name,
+                apellido: user.apellido,
+                mensaje: 'Gracias por su valoración, la misma ha sido registrada y ayudará a otros alumnos a buscar a su profesor ideal'
+            }
+            fetch('http://localhost:4000/comments/sendMail/',
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ obj })
+                }).then(response => response.json())
+                .then(data => {
+                    if (data.status === 200) {
+                        Swal.fire({
+                            title: 'Clase Valorada,',
+                            text: 'Gracias por su valoración',
+                            icon: 'success',
+                        })
+                            .then(res => {
+                                if (res.isConfirmed) {
+                                    window.location.reload()
+                                }
+                            })
+                    }
+                })
+        }
+
     }
+
+
 
     return (
 
@@ -223,9 +224,9 @@ const Reservas = () => {
                                             <TableCell align="center">
                                                 <Box component="fieldset" mb={3} borderColor="transparent">
                                                     <Rating name="rating" value={row.valoracion === undefined ? 0 : row.valoracion}
-                                                     onChange = {(e,newValue)=> handleupdatevaloracion(newValue,row)}
-                   
-                                                     />
+                                                        onChange={(e, newValue) => handleupdatevaloracion(newValue, row)}
+
+                                                    />
                                                 </Box>
                                             </TableCell>
                                             : <TableCell align="center">

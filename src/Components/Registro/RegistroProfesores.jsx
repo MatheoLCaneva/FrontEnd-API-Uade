@@ -18,6 +18,7 @@ const RegistroProfesores = () => {
     const [imagenes, setImagenes] = useState('')
     const [cargando, setCargando] = useState(false)
     const [fotoId, setFotoId] = useState(0)
+    const [status, setStatus] = useState(0)
     const nav = useNavigate()
 
 
@@ -83,17 +84,42 @@ const RegistroProfesores = () => {
                             timer: 3000,
                             timerProgressBar: true,
                         })
+                        setCargando(false)
+
                     }
                     else if (data.status === 201) {
-                        sessionStorage.setItem('token', data.createdUser)
-                        Swal.fire({
-                            title: 'Registro Exitoso',
-                            text: 'Su usuario se registro con exito. !Bienvenido!',
-                            icon: 'success',
-                            timer: 3000,
-                            timerProgressBar: true,
-                        })
-                        nav("/")
+                        const obj = {
+                            tipo: 1,
+                            email: event.email,
+                            asunto: 'Bienvenido/a',
+                            name: event.name,
+                            apellido: event.apellido,
+                            mensaje: `Usted se ha registrado con éxito en nuestra plataforma, esperamos que encuentre próximamente su profesor ideal.`,
+                            tel: event.tel
+
+                        }
+                        console.log(obj)
+                        fetch('http://localhost:4000/comments/sendMail/',
+                            {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ obj })
+                            }).then(response => response.json())
+                            .then(data => {
+                                if (data.status === 200) {
+                                    Swal.fire({
+                                        title: 'Registro Exitoso',
+                                        text: 'Su usuario se registro con exito. !Bienvenido!',
+                                        icon: 'success',
+                                    })
+                                        .then(res => {
+                                            setCargando(false)
+                                            if (res.isConfirmed) {
+                                                nav('/')
+                                            }
+                                        })
+                                }
+                            })
                     }
 
                 })
@@ -101,9 +127,7 @@ const RegistroProfesores = () => {
             } catch (err) {
                 console.log(err)
             }
-            finally {
-                setCargando(false)
-            }
+
         } else {
             Swal.fire({
                 title: 'Error',

@@ -15,18 +15,16 @@ const Comentario = () => {
 
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
-  const [idUpdate, setidUpdate] = useState('')
+  const [idClase, setidClase] = useState('')
+  const [idComentario, setidComentario] = useState('')
   const [emailUsuario, setEmailUsuario] = useState('')
   const [openRechazar, setOpenRechazar] = useState(false);
   const handleOpenRechazar = () => setOpenRechazar(true);
   const handleCloseRechazar = () => setOpenRechazar(false);
+  const [comentarioARechazar, setComentarioARechazar] = useState("")
   const { user } = useContext(ContextoAuth)
-  const [textoRechazo, setTextoRechazo] = useState
-    ({
-      name: "",
-      email: "",
-      mensaje: "",
-    })
+  const [textoRechazo, setTextoRechazo] = useState("")
+
 
   useEffect(() => {
     const obj = {
@@ -50,51 +48,47 @@ const Comentario = () => {
     }
   }, [user.email])
 
-  function accept(mail, clase) {
+  function accept(mail, clase, comentario) {
     setEmailUsuario(mail)
-    setidUpdate(clase)
+    setidComentario(clase)
+    setComentarioARechazar(comentario)
+
 
     setOpen(true)
   }
-  function denied(mail, comentario) {
+  function denied(mail, clase, comentario, comentarioId) {
     setEmailUsuario(mail)
-    setidUpdate(comentario)
+    setidClase(clase)
+    setComentarioARechazar(comentario)
+    setidComentario(comentarioId)
 
     handleOpenRechazar()
   }
 
   function handleStateChange(e) {
-    setTextoRechazo((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+    setTextoRechazo(e.target.value,
+    );
   }
 
   const handleDeleteComment = (e) => {
     e.preventDefault()
-    const obj = {
-      comentarioId: idUpdate,
-      usuario: emailUsuario
-    }
-    console.log(e)
+
 
     try {
-      textoRechazo.email = emailUsuario
-      console.log(textoRechazo)
+      var obj = {
+        tipo: 2,
+        email: emailUsuario,
+        textoRechazo: textoRechazo,
+        clase: idClase,
+        asunto: 'Comentario Rechazado',
+        mensaje: `El siguiente comentario: ${comentarioARechazar}, el cual realizó sobre una clase, fue rechazado por el profesor.`
+      }
       fetch('http://localhost:4000/comments/sendMail/',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({textoRechazo})
+          body: JSON.stringify({ obj })
         }).then(res => res.json())
-        .then(() => {
-          setTextoRechazo({
-            email: "",
-            name: "",
-            mensaje: "",
-          });
-        })
-
     }
     catch (e) {
       console.log(e)
@@ -102,6 +96,10 @@ const Comentario = () => {
 
 
     try {
+      var obj = {
+        comentarioId: idComentario,
+        usuario: emailUsuario
+      }
       fetch('http://localhost:4000/comments/', {
         method: 'delete',
         headers: { 'Content-Type': 'application/json' },
@@ -133,12 +131,29 @@ const Comentario = () => {
 
   const handleUpdateComment = (e) => {
     e.preventDefault(e)
-    const obj =
+    try {
+      var obj = {
+        tipo: 3,
+        email: emailUsuario,
+        clase: idClase,
+        asunto: 'Comentario Aceptado',
+        mensaje: `El siguiente comentario: ${comentarioARechazar}, el cual realizó sobre una clase, fue aceptado por el profesor.`
+      }
+      fetch('http://localhost:4000/comments/sendMail/',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ obj })
+        }).then(res => res.json())
+    }
+    catch (e) {
+      console.log(e)
+    }
+    var obj =
     {
       usuario: emailUsuario,
-      clase: idUpdate,
+      clase: idComentario,
       estado: true
-
     }
 
 
@@ -259,11 +274,11 @@ const Comentario = () => {
 
                       <TableCell align="center" id={row._id}>
                         <IconButton className={row.usuario} id={row._id} onClick={(e) => {
-                          accept(row.usuario, row._id)
+                          accept(row.usuario, row._id, row.comentario)
 
                         }}><DoneIcon className={row.usuario} id={row._id} /></IconButton>
                         <IconButton className={row.usuario} id={row._id} onClick={(e) => {
-                          denied(row.usuario, row._id)
+                          denied(row.usuario, row.clase, row.comentario, row._id)
 
                         }} ><ClearIcon className={row.usuario} id={row._id} /></IconButton>
                       </TableCell>

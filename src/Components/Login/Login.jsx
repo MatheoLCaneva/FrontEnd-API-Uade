@@ -6,6 +6,7 @@ import Checkbox from '@mui/material/Checkbox';
 import ContextoAuth from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
+import { useState } from "react";
 import './Login.css'
 // import * as Yup from 'yup';
 
@@ -16,10 +17,17 @@ const Login = () => {
     const btnstyle = { margin: '8px 0' }
     const TextfieldStyle = { margin: '3px 0' }
     const nav = useNavigate();
-
     const { loginUser, user } = useContext(ContextoAuth)
+    const [checked, setChecked] = useState(true)
+
+    const handleChange = (e) => {
+        setChecked(e.target.checked)
+    }
 
     const handleLogin = async (event) => {
+
+
+
         event.preventDefault()
         let bodyUser = {
             email: event.target.email.value,
@@ -37,11 +45,14 @@ const Login = () => {
                 response => response.json()
             ).then(
                 data => {
-                    if (data.message === 'Error en la contraseña' || data.message === 'Invalid username or password') { alert('Usuario o contraseña incorrectos') }
+                    if (data.status === 400) { alert('Usuario o contraseña incorrectos') }
                     else {
                         loginUser(data.loginUser.user)
-                        localStorage.setItem('user', JSON.stringify(data.loginUser.user))
-                        localStorage.setItem('token', JSON.stringify(data.loginUser.token))
+                        if (checked) {
+                            delete data.loginUser.user["password"]
+                            localStorage.setItem('user', JSON.stringify(data.loginUser.user))
+                            localStorage.setItem('token', JSON.stringify(data.loginUser.token))
+                        }
                         nav('/')
                     }
                 }
@@ -65,6 +76,8 @@ const Login = () => {
                     <FormControlLabel
                         control={
                             <Checkbox
+                                onChange={handleChange}
+                                checked={checked}
                                 name="checkedB"
                                 color="primary"
                             />

@@ -9,7 +9,6 @@ export const Auth = ({ children }) => {
 
     useEffect(() => {
         const almacenado = JSON.parse(localStorage.getItem("user"))
-
         if (almacenado) {
             loginUser(almacenado)
         }

@@ -137,7 +137,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                         </Typography>
                         <form onSubmit={handleContact}>
                             <TextField required disabled sx={inputs} value={user.name} name='nombre' id="outlined-basic" label="Nombre" variant="outlined" />
-                            <TextField required disabled sx={inputs} value='Caneva' id="outlined-basic" name='apellido' label="Apellido" variant="outlined" />
+                            <TextField required disabled sx={inputs} value={user.apellido} id="outlined-basic" name='apellido' label="Apellido" variant="outlined" />
                             <TextField required disabled sx={inputs} value={user.email} id="outlined-basic" nombre='email' label="Mail" variant="outlined" />
                             <TextField required disabled sx={inputs} value={user.tel} id="outlined-basic" name='tel' label="Teléfono" variant="outlined" />
                             <LocalizationProvider dateAdapter={AdapterDayjs}>

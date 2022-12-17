@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { TableCell, TableRow, Table, TableHead, TableBody, Typography } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done'
+import DoneAllIcon from '@mui/icons-material/DoneAll'
 import ContextoAuth from "../../Context/AuthContext";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -37,9 +38,9 @@ const ReservasProfesor = () => {
             _id: e.target.parentElement.id,
             estado: 'Aceptada'
         }
-
+        console.log("CONTACTOSS",contactos)
         try {
-            fetch('http://localhost:4000/contacts/', {
+            fetch('http://localhost:4000/contacts', {
                 method: 'put',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(obj)
@@ -63,13 +64,45 @@ const ReservasProfesor = () => {
         }
     }
 
+    const endSchedule = (e) => {
+        e.preventDefault()
+        const obj = {
+            _id: e.target.parentElement.id,
+            estado: 'Finalizada'
+        }
+
+        try {
+            fetch('http://localhost:4000/contacts/update', {
+                method: 'put',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(obj)
+            }).then(
+                response => response.json().then(response => {
+                    if (response.status === 200) {
+                        Swal.fire({
+                            title: 'Clase Finalizada',
+                            text: 'La Clase fue Finalizada!',
+                            icon: 'success',
+                            timer: 4000,
+                            timerProgressBar: true,
+
+                        })
+                    }
+                })
+            )
+        }
+        catch (err) {
+            alert(err)
+        }
+    }
+
     const deniedSchedule = (e) => {
         const obj = {
             _id: e.target.parentElement.id,
-            estado: 'Rechazada'
+            estado: 'Cancelada'
         }
         try {
-            fetch('http://localhost:4000/contacts/', {
+            fetch('http://localhost:4000/contacts/update', {
                 method: 'put',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(obj)
@@ -123,18 +156,29 @@ const ReservasProfesor = () => {
                                 <TableCell align="center">{row.estado}</TableCell>
 
                                 {
-                                    row.estado === "Aceptada" || row.estado === "Rechazada"
+                                    row.estado === "Aceptada" || row.estado === "Cancelada"
                                         ? null
                                         :
                                         <TableCell align="center" id={row._id}><DoneIcon style={{ cursor: "pointer" }} id={row._id} onClick={acceptSchedule} /></TableCell>
 
                                 }
                                 {
-                                    row.estado === "Aceptada" || row.estado === "Rechazada"
+                                    row.estado === "Aceptada" || row.estado === "Cancelada"
                                         ? null
                                         :
                                         <TableCell id='eliminar' align="right" ><DeleteIcon style={{ cursor: "pointer" }} id={row._id} onClick={deniedSchedule} /></TableCell>
                                 }
+
+                                {
+                                    row.estado === "Aceptada"
+                                        ?
+                                        <TableCell align="center" id={row._id}><DoneAllIcon style={{ cursor: "pointer" }} id={row._id} onClick={endSchedule} /></TableCell>
+                                        :
+                                        null
+
+                                }
+
+                                
 
                             </TableRow>
                         ))}

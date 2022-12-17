@@ -5,7 +5,7 @@ import CommentIcon from '@mui/icons-material/Comment';
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import ClearIcon from '@mui/icons-material/Clear';
-import DoneIcon from '@mui/icons-material/Done';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 import { calculateNewValue } from "@testing-library/user-event/dist/utils";
 
 
@@ -14,17 +14,43 @@ const Reservas = () => {
     const { user } = useContext(ContextoAuth)
     const [comentario, setComentario] = useState('')
     const [claseAcomentar, setClaseComentar] = useState({})
+    const [ClaseEstado, setEstadoClase] = useState
+    ({
+        _id:'',
+        alumno:'',
+        estado:'',
+        horario:'',
+        telefonoContacto:'',
+        mailContacto:'',
+        valoracion:'',
+
+    })
     const [claseValoracion, setValoracion] = useState
         (
             {}
-
         )
     const [open, setOpen] = useState(false);
     const handleClose = () => setOpen(false);
 
+    const [openFinalizar, setOpenFinalizar] = useState(false);
+    const handleCloseFinalizar = () => setOpenFinalizar(false);
+
+    const [openCancelar, setOpenCancelar] = useState(false);
+    const handleCloseCancelar = () => setOpenCancelar(false);
+
     function handleOpen(row) {
         setClaseComentar(row)
         setOpen(true)
+    }
+
+    function handleOpenFinalizarClase(row) {
+        setEstadoClase(row)
+        setOpenFinalizar(true)
+    }
+
+    function handleOpenCancelarClase(row) {
+        setEstadoClase(row);
+        setOpenCancelar(true);
     }
 
     useEffect(() => {
@@ -145,6 +171,67 @@ const Reservas = () => {
         }
     }
 
+    const handleUpdateEstadoCancelado = (e) =>
+    {
+        e.preventDefault()
+        ClaseEstado.estado = "Cancelada"
+        try {
+            fetch('http://localhost:4000/contacts/update', {
+                method: 'put',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(ClaseEstado)
+            }).then(res => res.json())
+            .then(data => {
+                if (data.status === 200) {
+                    Swal.fire({
+                        title: 'Estado Actualizado,',
+                        text: 'Gracias por actualizar',
+                        icon: 'success',
+                    })
+                        .then(res => {
+                            if (res.isConfirmed) {
+                                window.location.reload()
+                            }
+                        })
+                }
+            })
+            handleCloseCancelar();
+        } catch (error) {
+            alert(error)
+        }
+    }
+
+    const handleUpdateEstadoFinalizado = (e) =>
+    {
+        e.preventDefault()
+        ClaseEstado.estado = "Finalizada"
+        try {
+            fetch('http://localhost:4000/contacts/update', {
+                method: 'put',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(ClaseEstado)
+            }).then(res => res.json())
+            .then(data => {
+                if (data.status === 200) {
+                    Swal.fire({
+                        title: 'Estado Actualizado,',
+                        text: 'Gracias por actualizar',
+                        icon: 'success',
+                    })
+                        .then(res => {
+                            if (res.isConfirmed) {
+                                window.location.reload()
+                            }
+                        })
+                }
+            })
+            handleCloseFinalizar();
+        } catch (error) {
+            alert(error)
+        }
+    }
+
+
 
 
     return (
@@ -174,7 +261,43 @@ const Reservas = () => {
                     </Stack>
                 </form>
             </Box>
-        </Modal><div style={{ width: '80%', margin: 'auto' }}>
+        </Modal>
+        
+        <Modal
+            open={openFinalizar}
+            onClose={handleCloseFinalizar}
+            aria-labelledby="modal-modal-title1"
+            aria-describedby="modal-modal-description1">
+            <Box sx={styles}>
+                <Typography style={{ marginBottom: '10px' }} id="modal-modal-title1" variant="h5" component="h2">
+                   ¿Desea Finalizar las clases particulares? </Typography>
+                <form onSubmit={handleUpdateEstadoFinalizado}>
+                    <Stack spacing={2} direction="row">
+                        <Button style={{ display: "block" }} type='submit' variant="contained">Aceptar</Button>
+                        <Button style={{ display: "block" }} variant="contained" onClick={handleCloseFinalizar}>Cancelar</Button>
+                    </Stack>
+                </form>
+            </Box>
+        </Modal>
+        
+        <Modal
+            open={openCancelar}
+            onClose={handleCloseCancelar}
+            aria-labelledby="modal-modal-title2"
+            aria-describedby="modal-modal-description2">
+            <Box sx={styles}>
+                <Typography style={{ marginBottom: '10px' }} id="modal-modal-title2" variant="h5" component="h2">
+                   ¿Desea cancelar su solicitud a esta clase particular? </Typography>
+                <form onSubmit={handleUpdateEstadoCancelado}>
+                    <Stack spacing={2} direction="row">
+                        <Button style={{ display: "block" }} type='submit' variant="contained">Aceptar</Button>
+                        <Button style={{ display: "block" }} variant="contained" onClick={handleCloseCancelar}>Cancelar</Button>
+                    </Stack>
+                </form>
+            </Box>
+        </Modal>
+
+        <div style={{ width: '80%', margin: 'auto' }}>
                 <Typography variant="h3" style={{ fontFamily: "'Montserrat', sans-serif", display: 'flex', justifyContent: 'center', margin: "30px 0" }}>Detalle de reservas</Typography>
 
                 <TableContainer component={Paper}>
@@ -231,13 +354,17 @@ const Reservas = () => {
                                     {
                                         row.estado === "Aceptada"
                                         ?
-                                            <IconButton> <DoneIcon></DoneIcon></IconButton>
+                                            <IconButton onClick={(e,) => handleOpenFinalizarClase(row)}> <DoneAllIcon>
+
+                                            </DoneAllIcon></IconButton>
                                         :<></>
                                     }
                                     {
                                         row.estado === "Solicitada"
                                         ?
-                                        <IconButton> <ClearIcon></ClearIcon></IconButton>
+                                        <IconButton
+                                        onClick={(e) => handleOpenCancelarClase(row)}> 
+                                        <ClearIcon></ClearIcon></IconButton>
                                         :<></>
                                     } 
                                      

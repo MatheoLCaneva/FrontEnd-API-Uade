@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import ComentarioItem from '../ComentarioItem/ComentarioItem';
 
-const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, descripcion }) => {
+const ItemDetail = ({ id, apellido, profesor, precio, tipo, frecuencia, duracion, img, descripcion }) => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -137,7 +137,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                         </Typography>
                         <form onSubmit={handleContact}>
                             <TextField required disabled sx={inputs} value={user.name} name='nombre' id="outlined-basic" label="Nombre" variant="outlined" />
-                            <TextField required disabled sx={inputs} value='Caneva' id="outlined-basic" name='apellido' label="Apellido" variant="outlined" />
+                            <TextField required disabled sx={inputs} value={user.apellido} id="outlined-basic" name='apellido' label="Apellido" variant="outlined" />
                             <TextField required disabled sx={inputs} value={user.email} id="outlined-basic" nombre='email' label="Mail" variant="outlined" />
                             <TextField required disabled sx={inputs} value={user.tel} id="outlined-basic" name='tel' label="Teléfono" variant="outlined" />
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -160,7 +160,7 @@ const ItemDetail = ({ id, profesor, precio, tipo, frecuencia, duracion, img, des
                         </div>
                     </div>
                     <div className="acerca-profesor producto">
-                        <h2>Acerca de {profesor.name}</h2>
+                        <h2>Acerca de {profesor.name} {profesor.apellido}</h2>
                         <p>{profesor.descripcionProfesor}</p>
                     </div>
                     <div className="producto comentarios">

@@ -1,0 +1,21 @@
+.boxBienvenida {
+    margin: auto;
+    width: 80%;
+    margin-top: 5%;
+}
+
+.gridBienvenida {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.bienvenida-texto {
+    margin: 10px 0;
+}
+
+.bienvenida-texto h3 {
+    margin: 10px 0;
+    align-self: center;
+}

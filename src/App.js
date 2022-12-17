@@ -16,7 +16,7 @@ import Comentario from './Components/Comentario/Comentario';
 import Reservas from './Components/Reservas/Reservas';
 import ReservasProfesor from './Components/Reservas/ReservasProfesor';
 import Bienvenida from './Components/Bienvenida/Bienvenida';
-
+import IngresoContrasena from './Components/IngresoContrasena/IngresoContrasena';
 function App() {
   
   return (
@@ -25,6 +25,7 @@ function App() {
         <NavBar />
         <Routes>
           <Route path='/clase/:_id' element={<ItemDetailContainer />} />
+          <Route path='/nuevacontrasena/:email' element= {<IngresoContrasena/>}/>
           <Route path='/RegistroProfesor' element={<RegistroProfesores />} />
           <Route path='/Perfil' element={<Perfil />} />
           <Route path='/RegistroAlumno' element={<RegistroAlumnos />} />

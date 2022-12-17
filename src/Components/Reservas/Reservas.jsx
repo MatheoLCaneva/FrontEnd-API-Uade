@@ -152,23 +152,6 @@ const Reservas = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(claseValoracion)
             }).then(res => res.json())
-        } catch (err) {
-            alert(err)
-        }
-        finally {
-            const obj = {
-                email: user.email,
-                asunto: 'Calificacion Enviada',
-                name: user.name,
-                apellido: user.apellido,
-                mensaje: 'Gracias por su valoración, la misma ha sido registrada y ayudará a otros alumnos a buscar a su profesor ideal'
-            }
-            fetch('http://localhost:4000/comments/sendMail/',
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ obj })
-                }).then(response => response.json())
                 .then(data => {
                     if (data.status === 200) {
                         Swal.fire({
@@ -183,8 +166,9 @@ const Reservas = () => {
                             })
                     }
                 })
+        } catch (err) {
+            alert(err)
         }
-
     }
 
     const handleUpdateEstadoCancelado = (e) =>

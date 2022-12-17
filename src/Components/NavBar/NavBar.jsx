@@ -46,7 +46,7 @@ const NavBar = () => {
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Link className='link' to='/' style={{ color: 'white' }}>
+            <Link className='link' to='/listadoProfesores' style={{ color: 'white' }}>
               <Typography
                 variant="h6"
                 noWrap
@@ -141,7 +141,7 @@ const NavBar = () => {
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Link className='link' to='/' style={{ color: 'white' }}>
+            <Link className='link' to='/listadoProfesores' style={{ color: 'white' }}>
               <Typography
                 variant="h6"
                 noWrap

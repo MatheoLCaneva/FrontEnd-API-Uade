@@ -94,6 +94,7 @@ const Reservas = () => {
             clase: claseAcomentar.claseId,
             usuario: claseAcomentar.mailContacto,
             profesor: claseAcomentar.profesormail,
+            materia: claseAcomentar.materia,
             estado: false
         }
 
@@ -112,6 +113,7 @@ const Reservas = () => {
 
         finally {
             const obj = {
+                tipo: 0,
                 email: user.email,
                 asunto: 'Comentario Enviado',
                 name: user.name,
@@ -304,7 +306,7 @@ const Reservas = () => {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell align="left">Id de Clase</TableCell>
+                                <TableCell align="left">Clase</TableCell>
                                 <TableCell align="center">Horario</TableCell>
                                 <TableCell align="center">Mail Profesor</TableCell>
                                 <TableCell align="center">Estado</TableCell>
@@ -319,7 +321,7 @@ const Reservas = () => {
 
                                     <TableCell component="th" scope="row">
                                         <Link to={`/clase/${row.claseId}`} className='link' style={{ cursor: "pointer" }}>
-                                            {row.claseId}
+                                            {row.materia}
                                         </Link>
                                     </TableCell>
 

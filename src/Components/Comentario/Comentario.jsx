@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { Stack } from '@mui/system';
 import ContextoAuth from '../../Context/AuthContext';
 import { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 const Comentario = () => {
   const [tableData, setTableData] = useState([])
@@ -270,7 +271,11 @@ const Comentario = () => {
 
                       <TableCell align="center">{row.comentario}</TableCell>
                       <TableCell align="center">{row.usuario}</TableCell>
-                      <TableCell align="center">{row.clase}</TableCell>
+                      <TableCell align="center">
+                        <Link to={`/clase/${row.clase}`} className='link' style={{ cursor: "pointer" }}>
+                          {row.materia}
+                        </Link>
+                      </TableCell>
 
                       <TableCell align="center" id={row._id}>
                         <IconButton className={row.usuario} id={row._id} onClick={(e) => {

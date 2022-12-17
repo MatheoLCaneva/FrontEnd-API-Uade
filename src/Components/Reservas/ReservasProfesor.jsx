@@ -38,9 +38,9 @@ const ReservasProfesor = () => {
             _id: e.target.parentElement.id,
             estado: 'Aceptada'
         }
-        console.log("CONTACTOSS",contactos)
+        console.log("CONTACTOSS", contactos)
         try {
-            fetch('http://localhost:4000/contacts', {
+            fetch('http://localhost:4000/contacts/update', {
                 method: 'put',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(obj)
@@ -53,8 +53,12 @@ const ReservasProfesor = () => {
                             icon: 'success',
                             timer: 4000,
                             timerProgressBar: true,
-
                         })
+                            .then(res => {
+                                if (res.isConfirmed) {
+                                    window.location.reload()
+                                }
+                            })
                     }
                 })
             )
@@ -72,7 +76,7 @@ const ReservasProfesor = () => {
         }
 
         try {
-            fetch('http://localhost:4000/contacts/update', {
+            fetch('http://localhost:4000/contacts/end', {
                 method: 'put',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(obj)
@@ -87,6 +91,11 @@ const ReservasProfesor = () => {
                             timerProgressBar: true,
 
                         })
+                            .then(res => {
+                                if (res.isConfirmed) {
+                                    window.location.reload()
+                                }
+                            })
                     }
                 })
             )
@@ -96,13 +105,13 @@ const ReservasProfesor = () => {
         }
     }
 
-    const deniedSchedule = (e) => {
+    const deniedSchedule = async (e) => {
         const obj = {
             _id: e.target.parentElement.id,
             estado: 'Cancelada'
         }
         try {
-            fetch('http://localhost:4000/contacts/update', {
+           await fetch('http://localhost:4000/contacts/update', {
                 method: 'put',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(obj)
@@ -117,6 +126,11 @@ const ReservasProfesor = () => {
                             timerProgressBar: true,
 
                         })
+                            .then(res => {
+                                if (res.isConfirmed) {
+                                    window.location.reload()
+                                }
+                            })
                     }
                 })
             )
@@ -135,8 +149,8 @@ const ReservasProfesor = () => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Id</TableCell>
-                            <TableCell align="center">Alumno</TableCell>
+                            <TableCell>Materia</TableCell>
+                            <TableCell align="center">Horario</TableCell>
                             <TableCell align="center">Mail Contacto</TableCell>
                             <TableCell align="center">Telefono</TableCell>
                             <TableCell align="center">Estado</TableCell>
@@ -147,7 +161,7 @@ const ReservasProfesor = () => {
                             <TableRow key={row._id}>
                                 <TableCell component="th" scope="row">
                                     <Link to={`/clase/${row.claseId}`} className='link' style={{ cursor: "pointer" }}>
-                                        {row.claseId}
+                                        {row.alumno}
                                     </Link>
                                 </TableCell>
                                 <TableCell align="center">{row.horario}</TableCell>
@@ -156,14 +170,14 @@ const ReservasProfesor = () => {
                                 <TableCell align="center">{row.estado}</TableCell>
 
                                 {
-                                    row.estado === "Aceptada" || row.estado === "Cancelada"
+                                    row.estado === "Aceptada" || row.estado === "Cancelada" || row.estado === "Finalizada"
                                         ? null
                                         :
                                         <TableCell align="center" id={row._id}><DoneIcon style={{ cursor: "pointer" }} id={row._id} onClick={acceptSchedule} /></TableCell>
 
                                 }
                                 {
-                                    row.estado === "Aceptada" || row.estado === "Cancelada"
+                                    row.estado === "Aceptada" || row.estado === "Cancelada" || row.estado === "Finalizada"
                                         ? null
                                         :
                                         <TableCell id='eliminar' align="right" ><DeleteIcon style={{ cursor: "pointer" }} id={row._id} onClick={deniedSchedule} /></TableCell>
@@ -178,7 +192,7 @@ const ReservasProfesor = () => {
 
                                 }
 
-                                
+
 
                             </TableRow>
                         ))}

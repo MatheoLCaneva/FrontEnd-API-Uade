@@ -49,11 +49,14 @@ const IngresoContrasena = () => {
                     }
                 })
         }
-        Swal.fire({
-            title: 'Error',
-            text: 'Las contraseñas no coinciden',
-            icon: 'error',
-        })
+        else {
+            Swal.fire({
+                title: 'Error',
+                text: 'Las contraseñas no coinciden',
+                icon: 'error',
+            })
+        }
+
 
     }
 

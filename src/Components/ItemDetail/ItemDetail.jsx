@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import ComentarioItem from '../ComentarioItem/ComentarioItem';
 
-const ItemDetail = ({ id, apellido, profesor, precio, tipo, frecuencia, duracion, img, descripcion }) => {
+const ItemDetail = ({ id, materia, profesor, precio, tipo, frecuencia, duracion, img, descripcion }) => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -24,6 +24,8 @@ const ItemDetail = ({ id, apellido, profesor, precio, tipo, frecuencia, duracion
     const { _id } = useParams()
 
     const { user, isLogged } = useContext(ContextoAuth)
+
+    console.log(profesor)
 
     const handleChange = (newValue) => {
         setValue(newValue);
@@ -73,6 +75,7 @@ const ItemDetail = ({ id, apellido, profesor, precio, tipo, frecuencia, duracion
             telefonoContacto: user.tel,
             mailContacto: user.email,
             horario: `${value.$H}:${value.$m}`,
+            materia: materia,
             claseId: _id
         }
 
@@ -85,41 +88,46 @@ const ItemDetail = ({ id, apellido, profesor, precio, tipo, frecuencia, duracion
                 .then(
                     response => response.json()
                 )
+                .then(
+                    response => {
+                        if (response.status === 201) {
+                            const tiempoTranscurrido = Date.now();
+                            const hoy = new Date(tiempoTranscurrido);
+
+                            const obj = {
+                                tipo: 0,
+                                email: user.email,
+                                asunto: 'Reserva Creada',
+                                name: user.name,
+                                apellido: user.apellido,
+                                mensaje: `La reserva creada con fecha ${hoy.toLocaleDateString()} fue enviada al profesor. Para contactarlo puede enviar un mail a ${contacto.profesormail}. </br> Gracias por utilizar nuestra plataforma.`
+                            }
+                            fetch('http://localhost:4000/comments/sendMail/',
+                                {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ obj })
+                                }).then(response => response.json())
+                                .then(data => {
+                                    if (data.status === 200) {
+                                        Swal.fire({
+                                            title: 'Reserva Creada',
+                                            text: 'Su solicitud fue enviada con éxito',
+                                            icon: 'success',
+                                            timer: 3000,
+                                            timerProgressBar: true,
+
+                                        })
+                                    }
+                                })
+                        }
+                    }
+                )
             handleClose()
         } catch (err) {
             console.log(err)
         }
 
-        finally {
-            const tiempoTranscurrido = Date.now();
-            const hoy = new Date(tiempoTranscurrido);
-
-            const obj = {
-                email: user.email,
-                asunto: 'Reserva Creada',
-                name: user.name,
-                apellido: user.apellido,
-                mensaje: `La reserva creada con fecha ${hoy.toLocaleDateString()} fue enviada al profesor. Para contactarlo puede enviar un mail a ${contacto.profesormail}. </br> Gracias por utilizar nuestra plataforma.`
-            }
-            fetch('http://localhost:4000/comments/sendMail/',
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ obj })
-                }).then(response => response.json())
-                .then(data => {
-                    if (data.status === 200) {
-                        Swal.fire({
-                            title: 'Reserva Creada',
-                            text: 'Su solicitud fue enviada con éxito',
-                            icon: 'success',
-                            timer: 3000,
-                            timerProgressBar: true,
-
-                        })
-                    }
-                })
-        }
     }
 
     if (isLogged) {

@@ -53,7 +53,7 @@ const Login = () => {
                             localStorage.setItem('user', JSON.stringify(data.loginUser.user))
                             localStorage.setItem('token', JSON.stringify(data.loginUser.token))
                         }
-                        nav('/')
+                        nav('/listadoProfesores')
                     }
                 }
             )
